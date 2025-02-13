@@ -50,7 +50,7 @@ class Site extends Model
                         $dateCondition
                         $timeCondition
                         $nullCondition
-                        GROUP BY g.id, g.name;");
+                        GROUP BY g.id, g.name, g.description;");
     }
     
     public function getGroundDetails($data=[]){
