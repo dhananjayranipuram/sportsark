@@ -12,7 +12,7 @@ use \Illuminate\Http\UploadedFile;
 class AdminController extends Controller
 {
     public function login(){
-        
+        echo bcrypt('Dhananjay@123');exit;
         return view('admin/login');
         
     }
