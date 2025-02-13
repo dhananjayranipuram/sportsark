@@ -11,7 +11,6 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         // echo bcrypt('Dhananjay@123');exit;
-        echo bcrypt('Dhananjay@123');exit;
         return view('admin/login');
     }
 
