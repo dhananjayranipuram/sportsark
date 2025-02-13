@@ -256,7 +256,7 @@ class Admin extends Model
     }
 
     public function getGroundsDropdown(){
-
+        DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));");
         return DB::select("SELECT 
                             g.id AS ground_id, 
                             g.name AS ground_name
