@@ -34,7 +34,7 @@ class Site extends Model
                             g.id AS ground_id, 
                             g.name AS ground_name, 
                             g.description, 
-                            MAX(g.rate) AS 'rate', 
+                            g.rate, 
                             gc.id AS category_id, 
                             gc.name AS category_name,  
                             GROUP_CONCAT('storage/',gi.image_path SEPARATOR ', ') AS ground_images,
@@ -50,8 +50,8 @@ class Site extends Model
                         $condition
                         $dateCondition
                         $timeCondition
-                        $nullCondition
-                        GROUP BY g.id, g.name, g.description;");
+                        -- $nullCondition
+                        GROUP BY g.id;");
     }
     
     public function getGroundDetails($data=[]){

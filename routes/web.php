@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::any('/admin/update-game', [AdminController::class, 'updateGameData']);
 
     Route::any('/admin/bookings', [AdminController::class, 'showBookings']);
+    Route::any('/booking-status/{status}', [SiteController::class, 'statusOfBooking']);
 
     Route::any('/admin/logout', [LoginController::class, 'logout']);
 

@@ -334,12 +334,15 @@ function bookGround(data){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            alert("Booking confirmed.")
             generateTimeslot();
+            setTimeout(function () {
+                window.location.href = baseUrl + '/booking-status/success';
+            }, 2500);
         },
-        error: function(xhr, status, error) {
-            console.error("Booking failed: " + error);
-            alert('An error occurred. Please try again.');
+        error: function() {
+            setTimeout(function () {
+                window.location.href = baseUrl + '/booking-status/fail';
+            }, 2500);
         }
     });
 }

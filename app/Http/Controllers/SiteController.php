@@ -91,7 +91,7 @@ class SiteController extends Controller
         $filterData = $queries = [];
         parse_str($_SERVER['QUERY_STRING'], $queries);
         $input['ground_id'] = base64_decode($queries['id']);
-        $input['date'] = base64_decode($queries['date']);
+        $input['date'] = isset($queries['date']) ? base64_decode($queries['date']) : null;
         // echo '<pre>';print_r($input);exit;
         $availableTimeSlot = $site->getAvailableTimeSlots($input);
         // echo '<pre>';print_r($availableTimeSlot);exit;
@@ -239,5 +239,10 @@ class SiteController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function statusOfBooking($status){
+        $data['status'] = $status;
+        return view('site/booking-status',$data);
     }
 }

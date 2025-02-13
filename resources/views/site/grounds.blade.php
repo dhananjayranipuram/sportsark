@@ -192,7 +192,6 @@ function displayData() {
         dataType: "json",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
-            console.log("API Response:", res); // Debugging log
 
             if (!res.grounds || res.grounds.length === 0) {
                 console.warn("No grounds available.");
@@ -212,7 +211,7 @@ function displayData() {
                         <a href="${baseUrl}/ground-details?id=${window.btoa(ground.ground_id)}&date=${window.btoa(date)}&time=${window.btoa(time)}">
                             <div class="featured-card">
                                 <div class="image">
-                                    <img src="${baseUrl}/${firstImage}" alt="${ground.ground_name}" onerror="this.onerror=null; this.src='default-image.jpg';">
+                                    <img src="${baseUrl}/${firstImage}" alt="${ground.ground_name}">
                                 </div>
                                 <div class="content">
                                     <div class="top-content">

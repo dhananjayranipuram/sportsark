@@ -27,7 +27,8 @@
                     <div class="col-xl-3  col-12">
                         <div class="featured-card">
                             <div class="image">
-                                <a href="football.html"><img src="{{asset($value->image_path)}}" alt="">
+                                <a href="{{ url('/grounds') }}?game_id={{base64_encode($value->game_id)}}">
+                                    <img src="{{asset($value->image_path)}}" alt="">
                                     <h3 style=" text-align: center; color: black; padding: 13px 0px 0px 0px; ">{{$value->game_name}}</h3>
                                 </a>
                             </div>
