@@ -14,7 +14,7 @@
                             <p class="wow fadeInUp" data-wow-duration="1600ms">Experience premium sports grounds tailored to your game. Book your pitch by the hour and play your way. 
                                 From football to padel, we have the perfect field for you!</p>
                             <div class="hero-btn wow fadeInUp" data-wow-duration="1800ms">
-                                <a href="categories.html" class="theme-btn">find your grounds</a>
+                                <a href="{{ url('/games') }}" class="theme-btn">find your grounds</a>
                             </div>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="right-img wow fadeInRightSlow" data-wow-duration="1500ms">
-            <img src="assets/images/slider/slide-4.png" alt="">
+            <img src="{{ asset('assets/images/slider/slide-4.png') }}" alt="">
         </div>
     </div>
 </section>
@@ -46,32 +46,13 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-10 col-12">
                             <ul class="category-item">
+                                @foreach($games as $key => $value)
                                 <li>
-                                    <a data-filter=".all" href="#" class="featured-btn current">
-                                        All
+                                    <a data-filter=".{{$value->classname}}" href="#" class="featured-btn {{ $loop->first ? 'current' : '' }}" data-id="{{$value->game_id}}">
+                                        {{$value->game_name}}
                                     </a>
                                 </li>
-                                <li>
-                                    <a data-filter=".football" href="#" class="featured-btn">
-                                        Football
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-filter=".basketball" href="#" class="featured-btn">
-                                        Basketball
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-filter=".cricket" href="#" class="featured-btn">
-                                        Cricket
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-filter=".padel" href="#" class="featured-btn">
-                                        Padel
-                                    </a>
-                                </li>
-                                
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -79,10 +60,14 @@
             </div>
         </div>
         <div class="gallery-container gallery-fancybox masonry-gallery row" style="position: relative; height: 995.188px;">
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 custom-grid all football zoomIn" data-wow-duration="2000ms" style="position: absolute; left: 0px; top: 0px;">
+            @foreach($grounds as $key => $value)
+            <div class="col-xl-3 col-lg-4 col-md-6 col-12 custom-grid all {{$value->classname}} zoomIn" data-wow-duration="2000ms" style="position: absolute; left: 0px; top: 0px;">
                 <div class="featured-card">
                     <div class="image">
-                        <img src="assets/images/featured/1.jpg" alt="">
+                        @php
+                            $imageArray = explode(',',$value->ground_images);
+                        @endphp
+                        <img src="{{asset($imageArray[0])}}" alt="">
                     </div>
                     <div class="content">
                         <div class="top-content">
@@ -92,7 +77,7 @@
                                     <span class="date">A side</span>
                                 </li>
                                 <li>
-                                    <span>AED 300</span>
+                                    <span>AED {{$value->rate}}</span>
                                     <span class="date">Per Hour</span>
                                 </li>
                             </ul>
@@ -100,164 +85,10 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 custom-grid all basketball zoomIn" data-wow-duration="2000ms" style="position: absolute; left: 660px; top: 0px;">
-                <div class="featured-card">
-                    <div class="image">
-                        <img src="assets/images/featured/3.jpg" alt="">
-                    </div>
-                    <div class="content">
-                        <div class="top-content">
-                            <ul>
-                                <li>
-                                    <span>9</span>
-                                    <span class="date">A side</span>
-                                </li>
-                                <li>
-                                    <span>AED 300</span>
-                                    <span class="date">Per Hour</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 custom-grid all football zoomIn" data-wow-duration="2000ms" style="position: absolute; left: 330px; top: 0px;">
-                <div class="featured-card">
-                    <div class="image">
-                        <img src="assets/images/featured/2.jpg" alt="">
-                    </div>
-                    <div class="content">
-                        <div class="top-content">
-                            <ul>
-                                <li>
-                                    <span>9</span>
-                                    <span class="date">A side</span>
-                                </li>
-                                <li>
-                                    <span>AED 300</span>
-                                    <span class="date">Per Hour</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 custom-grid all basketball zoomIn" data-wow-duration="2000ms" style="position: absolute; left: 990px; top: 0px;">
-                <div class="featured-card">
-                    <div class="image">
-                        <img src="assets/images/featured/4.jpg" alt="">
-                    </div>
-                    <div class="content">
-                        <div class="top-content">
-                            <ul>
-                                <li>
-                                    <span>9</span>
-                                    <span class="date">A side</span>
-                                </li>
-                                <li>
-                                    <span>AED 300</span>
-                                    <span class="date">Per Hour</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 custom-grid all cricket zoomIn" data-wow-duration="2000ms" style="position: absolute; left: 330px; top: 497px;">
-                <div class="featured-card">
-                    <div class="image">
-                        <img src="assets/images/featured/6.jpg" alt="">
-                    </div>
-                    <div class="content">
-                        <div class="top-content">
-                            <ul>
-                                <li>
-                                    <span>9</span>
-                                    <span class="date">A side</span>
-                                </li>
-                                <li>
-                                    <span>AED 300</span>
-                                    <span class="date">Per Hour</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 custom-grid all padel zoomIn" data-wow-duration="2000ms" style="position: absolute; left: 660px; top: 497px;">
-                <div class="featured-card">
-                    <div class="image">
-                        <img src="assets/images/featured/7.jpg" alt="">
-                    </div>
-                    <div class="content">
-                        <div class="top-content">
-                            <ul>
-                                <li>
-                                    <span>9</span>
-                                    <span class="date">A side</span>
-                                </li>
-                                <li>
-                                    <span>AED 300</span>
-                                    <span class="date">Per Hour</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 custom-grid all cricket zoomIn" data-wow-duration="2000ms" style="position: absolute; left: 0px; top: 497px;">
-                <div class="featured-card">
-                    <div class="image">
-                        <img src="assets/images/featured/5.jpg" alt="">
-                    </div>
-                    <div class="content">
-                        <div class="top-content">
-                            <ul>
-                                <li>
-                                    <span>9</span>
-                                    <span class="date">A side</span>
-                                </li>
-                                <li>
-                                    <span>AED 300</span>
-                                    <span class="date">Per Hour</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12 custom-grid all padel zoomIn" data-wow-duration="2000ms" style="position: absolute; left: 990px; top: 497px;">
-                <div class="featured-card">
-                    <div class="image">
-                        <img src="assets/images/featured/8.jpg" alt="">
-                    </div>
-                    <div class="content">
-                        <div class="top-content">
-                            <ul>
-                                <li>
-                                    <span>9</span>
-                                    <span class="date">A side</span>
-                                </li>
-                                <li>
-                                    <span>AED 300</span>
-                                    <span class="date">Per Hour</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
         <div class="featured-all-btn">
-            <a href="Grounds.html" class="theme-btn-s2">view all Groundss</a>
+            <a class="theme-btn-s2 view-grounds">view all Groundss</a>
         </div>
     </div>
 </section>
@@ -304,8 +135,8 @@
                     <div class="service-card wow fadeInUp" data-wow-duration="1100ms">
                         <div class="left">
                             <div class="image">
-                                <img src="assets/images/features/1.png" alt="" class="active">
-                                <img src="assets/images/features/1.png" alt="" class="hover">
+                                <img src="{{ asset('assets/images/features/1.png') }}" alt="" class="active">
+                                <img src="{{ asset('assets/images/features/1.png') }}" alt="" class="hover">
                             </div>
                         </div>
                         <div class="right">
@@ -318,8 +149,8 @@
                     <div class="service-card wow fadeInUp" data-wow-duration="1200ms">
                         <div class="left">
                             <div class="image">
-                                <img src="assets/images/features/img-2.svg" alt="" class="active">
-                                <img src="assets/images/features/img-2.svg" alt="" class="hover">
+                                <img src="{{ asset('assets/images/features/img-2.svg') }}" alt="" class="active">
+                                <img src="{{ asset('assets/images/features/img-2.svg') }}" alt="" class="hover">
                             </div>
                         </div>
                         <div class="right">
@@ -332,8 +163,8 @@
                     <div class="service-card wow fadeInUp" data-wow-duration="1300ms">
                         <div class="left">
                             <div class="image">
-                                <img src="assets/images/features/3.png" alt="" class="active">
-                                <img src="assets/images/features/3.png" alt="" class="hover">
+                                <img src="{{ asset('assets/images/features/3.png') }}" alt="" class="active">
+                                <img src="{{ asset('assets/images/features/3.png') }}" alt="" class="hover">
                             </div>
                         </div>
                         <div class="right">
@@ -346,8 +177,8 @@
                     <div class="service-card wow fadeInUp" data-wow-duration="1400ms">
                         <div class="left">
                             <div class="image">
-                                <img src="assets/images/features/4.png" alt="" class="active">
-                                <img src="assets/images/features/4.png" alt="" class="hover">
+                                <img src="{{ asset('assets/images/features/4.png') }}" alt="" class="active">
+                                <img src="{{ asset('assets/images/features/4.png') }}" alt="" class="hover">
                             </div>
                         </div>
                         <div class="right">
@@ -360,8 +191,8 @@
                     <div class="service-card wow fadeInUp" data-wow-duration="1500ms">
                         <div class="left">
                             <div class="image">
-                                <img src="assets/images/features/5.png" alt="" class="active">
-                                <img src="assets/images/features/5.png" alt="" class="hover">
+                                <img src="{{ asset('assets/images/features/5.png') }}" alt="" class="active">
+                                <img src="{{ asset('assets/images/features/5.png') }}" alt="" class="hover">
                             </div>
                         </div>
                         <div class="right">
@@ -374,8 +205,8 @@
                     <div class="service-card wow fadeInUp" data-wow-duration="1600ms">
                         <div class="left">
                             <div class="image">
-                                <img src="assets/images/features/6.png" alt="" class="active">
-                                <img src="assets/images/features/6.png" alt="" class="hover">
+                                <img src="{{ asset('assets/images/features/6.png') }}" alt="" class="active">
+                                <img src="{{ asset('assets/images/features/6.png') }}" alt="" class="hover">
                             </div>
                         </div>
                         <div class="right">
@@ -408,7 +239,7 @@
             <div class="testimonial-card wow fadeInUp" data-wow-duration="1400ms">
                 <div class="top-content">
                     <div class="image">
-                        <img src="assets/images/testimonial/1.jpg" alt="">
+                        <img src="{{ asset('assets/images/testimonial/1.jpg') }}" alt="">
                     </div>
                     <div class="text">
                         <h3>Omar Hassan</h3>
@@ -422,7 +253,7 @@
             <div class="testimonial-card wow fadeInUp" data-wow-duration="1600ms">
                 <div class="top-content">
                     <div class="image">
-                        <img src="assets/images/testimonial/1.jpg" alt="">
+                        <img src="{{ asset('assets/images/testimonial/1.jpg') }}" alt="">
                     </div>
                     <div class="text">
                         <h3>Ali Ahmed</h3>
@@ -436,7 +267,7 @@
             <div class="testimonial-card wow fadeInUp" data-wow-duration="1800ms">
                 <div class="top-content">
                     <div class="image">
-                        <img src="assets/images/testimonial/1.jpg" alt="">
+                        <img src="{{ asset('assets/images/testimonial/1.jpg') }}" alt="">
                     </div>
                     <div class="text">
                         <h3>Sara Khalid</h3>
@@ -451,4 +282,25 @@
     </div>
 </section>
 <!-- end of testimonial-->
+
+<script>
+$(document).ready(function () {
+    $('.view-grounds').on('click', function (e) {
+        e.preventDefault();
+
+        var selectedGame = $('a.current');
+
+        if (selectedGame.length > 0) {
+            var gameId = selectedGame.data('id'); 
+
+            var encodedGameId = btoa(gameId);
+
+            window.location.href = baseUrl + '/grounds?game_id=' + encodedGameId;
+        } else {
+            alert("Please select a game before viewing grounds.");
+        }
+    });
+});
+
+</script>
 @endsection
