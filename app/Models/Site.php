@@ -29,7 +29,7 @@ class Site extends Model
             $nullCondition = " AND b.id IS NULL";
         }
 
-        DB::select("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));");
+        DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));");
         return DB::select("SELECT 
                             g.id AS ground_id, 
                             g.name AS ground_name, 
