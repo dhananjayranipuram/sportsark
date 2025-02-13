@@ -29,7 +29,8 @@ class Site extends Model
             $nullCondition = " AND b.id IS NULL";
         }
 
-        return DB::select("SELECT 
+        return DB::select("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));
+                        SELECT 
                             g.id AS ground_id, 
                             g.name AS ground_name, 
                             g.description, 
