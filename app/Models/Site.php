@@ -55,7 +55,7 @@ class Site extends Model
     }
     
     public function getGroundDetails($data=[]){
-
+        DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));");
         return DB::select("SELECT 
                             g.id AS ground_id, 
                             g.name AS ground_name, 
