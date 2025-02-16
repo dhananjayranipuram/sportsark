@@ -304,6 +304,13 @@
         </a>
       </li>
       
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ url('/admin/reports') }}">
+          <i class="bi bi-menu-button-wide"></i>
+          <span>Reports</span>
+        </a>
+      </li>
+      
 
     </ul>
 
