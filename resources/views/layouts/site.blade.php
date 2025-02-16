@@ -28,7 +28,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jersey&display=swap">
 
 </head>
-
+<style>
+.preloader {
+	background-color: #181717c7 !important;
+}
+</style>
 <body>
 
     <!-- start page-wrapper -->

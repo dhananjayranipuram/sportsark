@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Site;
 use App\Mail\OtpVerification;
+use App\Mail\BookingConfirmed;
 use Mail;
 use Session;
 
@@ -231,6 +232,8 @@ class SiteController extends Controller
         $credentials['userId'] = Session::get('login-data');
         $res = $site->saveGroundBookingData($credentials);
         if($res){
+            $emailData = $site->getEmailData($res);
+            $this->sendEmails($emailData[0]);
             $response['status'] = '200';
             $response['message'] = 'Ground booked succesfully.';
         }else{
@@ -239,6 +242,11 @@ class SiteController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function sendEmails($emailData){
+        Mail::to(config('app.constants.MAIL_TO_ADDRESS'))->send(new BookingConfirmed($emailData,'admin'));
+        Mail::to($emailData->email)->send(new BookingConfirmed($emailData,'customer'));
     }
 
     public function statusOfBooking($status){

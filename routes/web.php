@@ -26,6 +26,9 @@ Route::post('/admin/login', [LoginController::class, 'login']);
 
 Route::middleware('auth')->group(function () {
     Route::any('/admin/dashboard', [AdminController::class, 'dashboard']);
+    Route::any('/admin/get-dashboard-booking-data', [AdminController::class, 'getDashboardBooking']);
+    
+    Route::any('/admin/reports', [AdminController::class, 'reports']);
     
     Route::any('/admin/ground-list', [AdminController::class, 'grounds']);
     Route::any('/admin/add-ground', [AdminController::class, 'addGrounds']);

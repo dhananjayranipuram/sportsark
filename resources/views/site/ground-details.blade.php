@@ -264,6 +264,7 @@
 <!-- end of places-videos-->
 
 <script>
+var pendingBookingData = null;
 $(document).ready(function () {
 
     var urlParams = new URLSearchParams(window.location.search);
@@ -283,12 +284,12 @@ $(document).ready(function () {
 
     $(".popup-overlay").on("click", function (event) {
         if ($(event.target).closest(".popup-box").length === 0) {
-            $(this).hide(); // Hide popup when clicking outside
+            $(this).hide();
         }
     });
     
     $('.book-ground').on("click", function() {
-
+        $(".preloader").show();
         var selectedDate = $('#date').val();
         var selectedTime = $('#time').val();
         var urlParams = new URLSearchParams(window.location.search);
@@ -303,28 +304,26 @@ $(document).ready(function () {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
+                    $(".preloader").hide();
                     if(response.status){
                         
-                        var data = {
-                            date: selectedDate,
-                            time: selectedTime,
-                            ground_id: groundId
-                        };
-
-                        bookGround(data)
+                        bookGround({ date: selectedDate, time: selectedTime, ground_id: groundId });
                     }else{
+                        pendingBookingData = { date: selectedDate, time: selectedTime, ground_id: groundId };
                         togglePopup('registrationPopup');
                     }
                 }
             });
             
         } else {
+            $(".preloader").hide();
             alert('Please select a valid date, time, and ground.');
         }
     });
 });
 
 function bookGround(data){
+    $(".preloader").show();
     $.ajax({
         url: baseUrl + '/book-ground',
         type: 'POST',
@@ -334,12 +333,14 @@ function bookGround(data){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            $(".preloader").hide();
             generateTimeslot();
             setTimeout(function () {
                 window.location.href = baseUrl + '/booking-status/success';
             }, 2500);
         },
         error: function() {
+            $(".preloader").hide();
             setTimeout(function () {
                 window.location.href = baseUrl + '/booking-status/fail';
             }, 2500);
@@ -348,11 +349,13 @@ function bookGround(data){
 }
 
 $('#sendOtpBtn').on('click', function () {
+    $(".preloader").show();
     var email = $('#email').val();
     var phone = $('#phone').val();
     var name = $('#name').val();
 
     if (!email || !phone || !name) {
+        $(".preloader").hide();
         alert('Please fill all the fields.');
         return;
     }
@@ -370,6 +373,7 @@ $('#sendOtpBtn').on('click', function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            $(".preloader").hide();
             if (response.success) {
                 $('#otpSection').show();
                 $('#sendOtpBtn').hide();
@@ -379,15 +383,18 @@ $('#sendOtpBtn').on('click', function () {
             }
         },
         error: function() {
+            $(".preloader").hide();
             alert('Error sending OTP.');
         }
     });
 });
 
 $('#sendOtpBtnLogin').on('click', function () {
+    $(".preloader").show();
     var email = $('#loginEmail').val();
 
     if (!email) {
+        $(".preloader").hide();
         alert('Please fill all the fields.1');
         return;
     }
@@ -403,6 +410,7 @@ $('#sendOtpBtnLogin').on('click', function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            $(".preloader").hide();
             if (response.success) {
                 alert('OTP sent successfully!');
                 $('#otpSectionLogin').show();
@@ -413,18 +421,21 @@ $('#sendOtpBtnLogin').on('click', function () {
             }
         },
         error: function() {
+            $(".preloader").hide();
             alert('Error sending OTP.');
         }
     });
 });
 
 $('#verifyOtpBtn').on('click', function () {
+    $(".preloader").show();
     var email = $('#email').val();
     var phone = $('#phone').val();
     var name = $('#name').val();
     var otp = $('#otp').val();
 
     if (!email || !otp) {
+        $(".preloader").hide();
         alert('Please enter your email and OTP.');
         return;
     }
@@ -443,23 +454,31 @@ $('#verifyOtpBtn').on('click', function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            $(".preloader").hide();
             if (response.status == 200) {
                 alert('Registration successful!');
+                if (pendingBookingData) {
+                    bookGround(pendingBookingData);
+                    pendingBookingData = null;
+                }
             } else {
                 alert('Invalid OTP. Please try again.');
             }
         },
         error: function() {
+            $(".preloader").hide();
             alert('Error verifying OTP.');
         }
     });
 });
 
 $('#verifyOtpBtnLogin').on('click', function () {
+    $(".preloader").show();
     var email = $('#loginEmail').val();
     var otp = $('#loginotp').val();
 
     if (!email || !otp) {
+        $(".preloader").hide();
         alert('Please enter your email and OTP.');
         return;
     }
@@ -476,14 +495,20 @@ $('#verifyOtpBtnLogin').on('click', function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            $(".preloader").hide();
             if (response.status == 200) {
                 alert('Login successful!');
+                if (pendingBookingData) {
+                    bookGround(pendingBookingData);
+                    pendingBookingData = null;
+                }
                 togglePopup('loginPopup');
             } else {
                 alert('Invalid User. Please try again.');
             }
         },
         error: function() {
+            $(".preloader").hide();
             alert('Error verifying OTP.');
         }
     });
@@ -510,6 +535,7 @@ $('#date').on('change', function () {
 });
 
 function generateTimeslot(){
+    $(".preloader").show();
     var selectedDate = $('#date').val();
     var urlParams = new URLSearchParams(window.location.search);
     var groundId = atob(urlParams.get('id'));
@@ -526,7 +552,7 @@ function generateTimeslot(){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-
+            $(".preloader").hide();
             var allTimeSlot = response.allTimeSlot;
             var availableTimeSlot = Object.values(response.availabelTimeSlot);
             $("#time").niceSelect('destroy');

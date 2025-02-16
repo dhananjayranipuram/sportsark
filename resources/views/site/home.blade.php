@@ -62,28 +62,30 @@
         <div class="gallery-container gallery-fancybox masonry-gallery row" style="position: relative; height: 995.188px;">
             @foreach($grounds as $key => $value)
             <div class="col-xl-3 col-lg-4 col-md-6 col-12 custom-grid all {{$value->classname}} zoomIn" data-wow-duration="2000ms" style="position: absolute; left: 0px; top: 0px;">
-                <div class="featured-card">
-                    <div class="image">
-                        @php
-                            $imageArray = explode(',',$value->ground_images);
-                        @endphp
-                        <img src="{{asset($imageArray[0])}}" alt="">
-                    </div>
-                    <div class="content">
-                        <div class="top-content">
-                            <ul>
-                                <li>
-                                    <span>9</span>
-                                    <span class="date">A side</span>
-                                </li>
-                                <li>
-                                    <span>AED {{$value->rate}}</span>
-                                    <span class="date">Per Hour</span>
-                                </li>
-                            </ul>
+                <a href="{{ url('/ground-details')}}?id={{base64_encode($value->ground_id)}}">
+                    <div class="featured-card">
+                        <div class="image">
+                            @php
+                                $imageArray = explode(',',$value->ground_images);
+                            @endphp
+                            <img src="{{asset($imageArray[0])}}" alt="">
+                        </div>
+                        <div class="content">
+                            <div class="top-content">
+                                <ul>
+                                    <li>
+                                        <span>{{ $value->category_name }}</span>
+                                        <span class="date">{{ $value->ground_name }}</span>
+                                    </li>
+                                    <li>
+                                        <span>AED {{ $value->rate }}</span>
+                                        <span class="date">Per Hour</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             @endforeach
         </div>

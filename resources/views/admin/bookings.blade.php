@@ -88,50 +88,40 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript">
     $(function() {
-    
-    // var start = moment().subtract(29, 'days');
-    var fromDate = "{{ old('from') ?? session('bookingFilter.from') ?? '' }}";
-    var toDate = "{{ old('to') ?? session('bookingFilter.to') ?? '' }}";
+        var fromDate = "{{ old('from') ?? session('bookingFilter.from') ?? '' }}";
+        var toDate = "{{ old('to') ?? session('bookingFilter.to') ?? '' }}";
 
-    if(fromDate === '' ){
-      var start = moment();
-    }else{
-      var start = moment(fromDate);
-    }
-    if(toDate === ''){
-      var end = moment();
-    }else{
-      var end = moment(toDate);
-    }
-    
-    function cb(start, end) {
-        if(start.format('DD-MM-Y') == '01-01-1970'){
-            $('#reportrange span').html('Starting point - ' + end.format('DD-MM-Y'));
-        }else{
-            $('#reportrange span').html(start.format('DD-MM-Y') + ' - ' + end.format('DD-MM-Y'));
+        var start = fromDate === '' ? moment() : moment(fromDate);
+        var end = toDate === '' ? moment() : moment(toDate);
+
+        function cb(start, end) {
+            if (start.format('DD-MM-Y') == '01-01-1970') {
+                $('#reportrange span').html('Starting point - ' + end.format('DD-MM-Y'));
+            } else {
+                $('#reportrange span').html(start.format('DD-MM-Y') + ' - ' + end.format('DD-MM-Y'));
+            }
+            $("#from").val(start.format('YYYY-MM-DD')); // Use full YYYY-MM-DD format for backend
+            $("#to").val(end.format('YYYY-MM-DD'));
         }
-        $("#from").val(start.format('Y-MM-DD'));
-        $("#to").val(end.format('Y-MM-DD'));
-    }
 
-    $('#reportrange').daterangepicker({
-        startDate: start,
-        endDate: end,
-        ranges: {
-           'Today': [moment(), moment()],
-           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-           'This Month': [moment().startOf('month'), moment().endOf('month')],
-           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-          'This Year': [moment().startOf('year'), moment().endOf('year')],
-          'Maximum': [moment("1970-01-01"), moment()],
-        }
-    }, cb);
+        $('#reportrange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'This Year': [moment().startOf('year'), moment().endOf('year')],
+                'Maximum': [moment("1970-01-01"), moment()],
+            }
+        }, cb);
 
-    cb(start, end);
+        cb(start, end);
+    });
 
-});
 
     $(document).ready(function () { 
     

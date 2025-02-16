@@ -158,4 +158,21 @@ class Site extends Model
         }
         
     }
+
+    public function getEmailData($id) {
+        return DB::select("SELECT 
+                eu.name AS customer_name,
+                eu.email,
+                g.name AS ground_name,
+                gc.name AS game_name,
+                DATE_FORMAT(b.book_date, '%d-%b-%Y') AS book_date,
+                b.book_time AS book_time
+            FROM booking b
+            LEFT JOIN grounds g ON g.id = b.ground_id
+            LEFT JOIN ground_category gc ON g.game_id = gc.id
+            LEFT JOIN enduser eu ON eu.id = b.user_id
+            WHERE b.id = :id", 
+            ['id' => $id]);
+    }
+    
 }

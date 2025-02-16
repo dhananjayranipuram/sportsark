@@ -274,4 +274,101 @@ class Admin extends Model
                         WHERE gc.deleted = 0 AND gc.active = 1
                         ORDER BY gc.name;");
     }
+
+    public function getLatestBookingData($data)
+    {
+        return DB::select("
+            SELECT 
+                b.id AS booking_id, 
+                eu.name AS customer_name, 
+                eu.phone AS customer_mobile, 
+                DATE_FORMAT(b.book_date, '%d-%b-%Y') AS book_date, 
+                b.book_time 
+            FROM booking b
+            LEFT JOIN grounds g ON g.id = b.ground_id
+            LEFT JOIN enduser eu ON eu.id = b.user_id
+            WHERE (b.book_date BETWEEN ? AND ?) 
+            AND b.status > -1
+            ORDER BY b.book_date ASC
+        ", [$data['from'], $data['to']]);
+    }
+
+
+    public function getBookingData($data)
+    {
+        return DB::select("
+            SELECT 'Today' AS 'label', COUNT(id) AS cnt 
+            FROM booking 
+            WHERE (book_date BETWEEN ? AND ?) AND status > '-1'
+            
+            UNION
+            
+            SELECT 'Yesterday' AS 'label', COUNT(id) AS cnt 
+            FROM booking 
+            WHERE (book_date BETWEEN ? AND ?) AND status > '-1';
+        ", [
+            $data['from'], 
+            $data['to'], 
+            $data['prev_from'], 
+            $data['prev_to']
+        ]);
+    }
+
+
+    public function getCustomerData($data)
+    {
+        return DB::select("
+            SELECT 'Today' AS label, COUNT(u.id) AS cnt 
+            FROM enduser u 
+            WHERE u.created_at BETWEEN ? AND ?
+            
+            UNION
+            
+            SELECT 'Yesterday' AS label, COUNT(u.id) AS cnt 
+            FROM enduser u 
+            WHERE u.created_at BETWEEN ? AND ?;
+        ", [
+            $data['from'], 
+            $data['to'], 
+            $data['prev_from'], 
+            $data['prev_to']
+        ]);
+    }
+
+    public function getGroundWiseBookingData($data)
+    {
+        return DB::select("
+            SELECT g.id, COUNT(b.ground_id) AS value, g.name AS name 
+            FROM grounds g
+            LEFT JOIN booking b ON g.id = b.ground_id
+            WHERE (b.book_date BETWEEN ? AND ?) AND b.status > '-1'
+            GROUP BY g.id;
+        ", [
+            $data['from'], 
+            $data['to']
+        ]);
+    }
+
+    public function getBookingHistoryReports($data){
+        
+        return DB::select("
+            SELECT 
+                b.id AS booking_id, 
+                eu.id AS customer_id, 
+                eu.name AS customer_name,
+                g.id AS ground_id,
+                g.name AS ground_name,
+                gc.id AS game_id,
+                gc.name AS game_name,
+                g.rate 
+            FROM booking b
+            LEFT JOIN grounds g ON g.id = b.ground_id
+            LEFT JOIN enduser eu ON eu.id = b.user_id
+            LEFT JOIN ground_category gc ON gc.id=g.game_id
+            WHERE (b.book_date BETWEEN ? AND ?) 
+            AND b.status > -1
+            ORDER BY b.book_date ASC
+        ", [$data['from'], $data['to']]);
+    }
+
 }

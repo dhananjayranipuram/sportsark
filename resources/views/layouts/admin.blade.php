@@ -308,7 +308,7 @@
     </ul>
 
   </aside><!-- End Sidebar-->
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <main id="main" class="main" style="min-height:582px;">
 
     @yield('content')
@@ -433,7 +433,7 @@
 
   <!-- Template Main JS File -->
   <script src="{{asset('admin_assets/js/main.js')}}"></script>
-  <script src="{{asset('assets/js/jquery-3.4.1.min.js')}}"></script>
+  
 
   <script src="{{asset('admin_assets/js/moment.min.js')}}"></script>
   <script src="{{asset('admin_assets/js/daterangepicker.min.js')}}"></script>
