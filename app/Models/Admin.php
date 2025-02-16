@@ -337,6 +337,7 @@ class Admin extends Model
 
     public function getGroundWiseBookingData($data)
     {
+        DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));");
         return DB::select("
             SELECT g.id, COUNT(b.ground_id) AS value, g.name AS name 
             FROM grounds g
