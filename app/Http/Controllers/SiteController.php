@@ -146,7 +146,7 @@ class SiteController extends Controller
         $site = new Site();
         $credentials = $request->validate([
             'email' => 'required|email',
-            'phone' => 'required|digits:10',
+            'phone' => ['required', 'regex:/^\+?[0-9]{10,15}$/'],
             'name' => 'required|string|max:255',
         ]);
 
@@ -187,7 +187,10 @@ class SiteController extends Controller
         $res = $site->verifyOtp($credentials);
         if($res){
             $res = $site->registerUserData($credentials);
-
+            $valid = $site->loginUser($credentials);
+            if($valid>0){
+                Session::put('login-data', $valid);
+            }
             $response['status'] = '200';
             $response['message'] = 'OTP verified succesfully.';
         }else{

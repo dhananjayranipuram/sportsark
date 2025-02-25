@@ -133,7 +133,7 @@
 }
 </style>
 <!-- start of breadcumb-section -->
-<div class="wpo-breadcumb-area">
+<!-- <div class="wpo-breadcumb-area">
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -147,12 +147,12 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- end of wpo-breadcumb-section-->
 
 <div id="registrationPopup" class="popup-overlay">
     <div class="popup-box">
-        <h2>Registration Form</h2>
+        <h2>Sign Up</h2>
         <span class="close-modal" onclick="togglePopup('registrationPopup')">X</span>
         
         <!-- Registration Form -->
@@ -164,11 +164,11 @@
             <div id="otpSection" style="display:none;">
                 <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
             </div>
-            <button type="button" id="sendOtpBtn">Send OTP</button>
+            <button type="button" id="sendOtpBtn">Create Account</button>
             <button type="button" id="verifyOtpBtn" style="display:none;">Verify OTP</button>
         </form>
         
-        <p>Already registered? <a onclick="togglePopup('registrationPopup'); togglePopup('loginPopup')">Click here</a></p>
+        <p>Already Signed up? <a onclick="togglePopup('registrationPopup'); togglePopup('loginPopup')">Sign In</a></p>
     </div>
 </div>
 
@@ -188,7 +188,7 @@
             <button type="button" id="verifyOtpBtnLogin" style="display:none;">Verify OTP</button>
         </form>
         
-        <p>Not registered? <a onclick="togglePopup('loginPopup'); togglePopup('registrationPopup')">Click here</a></p>
+        <p>Not Signed up? <a onclick="togglePopup('loginPopup'); togglePopup('registrationPopup')">Sign Up</a></p>
     </div>
 </div>
 

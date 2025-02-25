@@ -1,6 +1,30 @@
 @extends('layouts.site')
 
 @section('content')
+<style>
+.wpo-site-header #navbar{
+    background: #008000;
+}
+.wpo-site-header .navbar-nav > li:hover{
+    color: #e6e6e6;
+}
+@media (min-width:320px)  { 
+    .hero-section-s2 .hero-wraper .hero-content-slider{
+        margin-top:20px;
+    }
+}
+@media (min-width:481px)  { 
+    .hero-section-s2 .hero-wraper .hero-content-slider{
+        margin-top:20px;
+    } 
+}
+@media (min-width:641px)  { 
+    .hero-section-s2 .hero-wraper .hero-content-slider{
+        margin-top:20px;
+    }
+}
+
+</style>
 <!-- start of hero -->
 <section class="hero-section-s2">
     <div class="hero-wraper">

@@ -114,7 +114,7 @@ class Site extends Model
 
         return DB::table('booking')
             ->where('ground_id', $data['ground_id'])
-            // ->where('book_date', $selectedDate)
+            ->where('book_date', $data['date'])
             ->where('status', '!=', 2)
             ->pluck('book_time')
             ->toArray();

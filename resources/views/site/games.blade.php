@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- start of breadcumb-section -->
-<div class="wpo-breadcumb-area">
+<!-- <div class="wpo-breadcumb-area">
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -16,7 +16,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- end of wpo-breadcumb-section-->
 <section class="places-videos-section section-padding">
     <div class="container">

@@ -31,6 +31,7 @@
 <style>
 .preloader {
 	background-color: #181717c7 !important;
+    z-index: 1001 !important;
 }
 </style>
 <body>
