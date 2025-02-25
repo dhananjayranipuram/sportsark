@@ -69,7 +69,7 @@
                             </div>
                             <div class="col-lg-2 col-md-4 col-4">
                                 <div class="navbar-header">
-                                    <a class="navbar-brand" href="{{ url('/home') }}"><img src="{{asset('assets/images/logo.png') }}"
+                                    <a class="navbar-brand" href="{{ url('/') }}"><img src="{{asset('assets/images/logo.png') }}"
                                             alt="logo"></a>
                                 </div>
                             </div>
@@ -77,11 +77,11 @@
                                 <div id="navbar" class="collapse navbar-collapse navigation-holder">
                                     <button class="menu-close"><i class="ti-close"></i></button>
                                     <ul class="nav navbar-nav mb-2 mb-lg-0">
-                                        <li><a href="{{ url('/home') }}">Home</a></li>
-                                        <li><a href="{{ url('/home') }}#ground">Ground</a></li>
-                                        <li><a href="{{ url('/home') }}#about">About us</a></li>
-                                        <li><a href="{{ url('/home') }}#testimonial">Testimonial</a></li>
-                                        <li><a href="{{ url('/home') }}#contact">Contact</a></li>
+                                        <li><a href="{{ url('/') }}">Home</a></li>
+                                        <li><a href="{{ url('/') }}#ground">Ground</a></li>
+                                        <li><a href="{{ url('/') }}#about">About us</a></li>
+                                        <li><a href="{{ url('/') }}#testimonial">Testimonial</a></li>
+                                        <li><a href="{{ url('/') }}#contact">Contact</a></li>
                                     </ul>
 
                                 </div><!-- end of nav-collapse -->

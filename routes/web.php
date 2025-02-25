@@ -49,7 +49,7 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::any('/home', [SiteController::class, 'home']);
+Route::any('/', [SiteController::class, 'home']);
 Route::any('/games', [SiteController::class, 'games']);
 Route::any('/grounds', [SiteController::class, 'grounds']);
 Route::any('/ground-details', [SiteController::class, 'groundDetails']);
