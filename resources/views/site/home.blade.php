@@ -2,27 +2,19 @@
 
 @section('content')
 <style>
-.wpo-site-header #navbar{
-    background: #008000;
-}
-.wpo-site-header .navbar-nav > li:hover{
-    color: #e6e6e6;
-}
-@media (min-width:320px)  { 
-    .hero-section-s2 .hero-wraper .hero-content-slider{
-        margin-top:20px;
-    }
-}
-@media (min-width:481px)  { 
+
+@media only screen 
+  and (max-width: 480px) { 
     .hero-section-s2 .hero-wraper .hero-content-slider{
         margin-top:20px;
     } 
-}
-@media (min-width:641px)  { 
-    .hero-section-s2 .hero-wraper .hero-content-slider{
-        margin-top:20px;
+    .wpo-site-header #navbar{
+        background: #008000;
     }
-}
+    .wpo-site-header .navbar-nav > li:hover{
+        color: #e6e6e6;
+    }
+} 
 
 </style>
 <!-- start of hero -->
