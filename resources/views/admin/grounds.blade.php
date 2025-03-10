@@ -15,10 +15,10 @@
                     @endif
                     <div style="text-align: right;"><a style="padding-right: 10px;" href="{{ url('/admin/add-ground') }}" class="addNew"><i class="bi bi-person-plus"></i> Add New Ground</a></div>
                     <!-- Table with stripped rows -->
-                    <table class="table datatable">
+                    <table class="table datatable" id="groundTable">
                         <thead>
                             <tr>
-                            <th>Ground ID</th>
+                            <th >Ground ID</th>
                             <th>Name</th>
                             <th>Rate</th>
                             <th>Category</th>
@@ -51,6 +51,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function () {
+
+    $('#groundTable').DataTable({
+        "columnDefs": [
+            { "className": "text-start", "targets": 0 }
+        ]
+    });
+
     $('.deleteDoc').on('click', function () {
         var groundId = $(this).data('id');
 

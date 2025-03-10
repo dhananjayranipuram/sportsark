@@ -15,7 +15,7 @@
                     @endif
                     <div style="text-align: right;"><a style="padding-right: 10px;" href="{{ url('/admin/add-games') }}" class="addNew" data-bs-toggle="modal" data-bs-target="#addGameModal"><i class="bi bi-person-plus"></i> Add New Game</a></div>
                     <!-- Table with stripped rows -->
-                    <table class="table datatable">
+                    <table class="table datatable" id="gameTable">
                         <thead>
                             <tr>
                             <th>Game ID</th>
@@ -125,6 +125,11 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
+        $('#gameTable').DataTable({
+            "columnDefs": [
+                { "className": "text-start", "targets": 0 }
+            ]
+        });
         $('.saveGame').on('click', function (e) {
             // Prevent the form from submitting immediately
             e.preventDefault();
