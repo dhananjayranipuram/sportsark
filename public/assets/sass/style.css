@@ -4342,6 +4342,7 @@ a.ui-button:active,
 .featured-card .image img {
   width: 100%;
   border-radius: 12px;
+  height: 200px;
 }
 .featured-card .content {
   margin-top: 20px;
