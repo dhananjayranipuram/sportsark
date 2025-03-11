@@ -422,4 +422,27 @@ class AdminController extends Controller
         ];
     }
 
+    public function deleteGroundImage(Request $request)
+    {
+
+        $admin = new Admin();
+
+        if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'ground_id' => 'required',
+                'image' => 'required'
+            ]);
+
+            $updateStatus = $admin->deleteGroundImage($validated);
+            if ($updateStatus) {
+                $res['status'] = 200;
+                $res['data'] = 'Image deleted successfully!';
+            } else {
+                $res['status'] = 400;
+                $res['data'] = 'Error deleting the image.';
+            }
+            return response()->json($res);
+        }
+    }
+
 }

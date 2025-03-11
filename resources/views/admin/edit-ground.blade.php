@@ -83,11 +83,12 @@
                 @php
                     $existingImages = explode(', ', $grounds->ground_images ?? '');
                 @endphp
-                @if(!empty($existingImages))
+                @if(!empty($existingImages) &&  $grounds->ground_images != null)
                     <div class="row">
                         @foreach($existingImages as $image)
-                            <div class="col-md-2">
+                            <div class="col-md-2 position-relative">
                                 <img src="{{ asset($image) }}" alt="Ground Image" class="img-thumbnail">
+                                <button type="button" class="btn btn-danger btn-sm delete-image" data-image="{{ $image }}" data-id="{{ $grounds->ground_id }}" style="position: absolute; top: 10px; right: 25px;">✖</button>
                             </div>
                         @endforeach
                     </div>
@@ -114,6 +115,35 @@ $(document).ready(function() {
     $('.select2').select2({
         placeholder: "Select Available Week Days",
         allowClear: true
+    });
+
+    $(".delete-image").click(function () {
+        var image = $(this).data("image");
+        var groundId = $(this).data("id");
+        var button = $(this);
+
+        if (confirm("Are you sure you want to delete this image?")) {
+            $.ajax({
+                url: "{{ url('/admin/delete-ground-image') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    image: image,
+                    ground_id: groundId
+                },
+                success: function (response) {
+                    if (response.status === 200) {
+                        button.closest(".col-md-2").remove();
+                        alert("Image deleted successfully.");
+                    } else {
+                        alert("Failed to delete the image.");
+                    }
+                },
+                error: function () {
+                    alert("An error occurred. Please try again.");
+                }
+            });
+        }
     });
 });
 </script>

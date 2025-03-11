@@ -215,6 +215,33 @@ class Admin extends Model
         );
     }
 
+    public function deleteGroundImage($data = [])
+    {
+        try {
+            if (!isset($data['ground_id']) || !isset($data['image'])) {
+                return false;
+            }
+            $dbImage = str_replace('storage/', '', $data['image']);
+            $imagePath = storage_path('app/public/' . $dbImage);
+            $imageExists = DB::select("SELECT COUNT(*) as count FROM ground_images WHERE ground_id = ? AND image_path = ?", [$data['ground_id'], $dbImage]);
+            if (!empty($imageExists) && $imageExists[0]->count > 0) {
+                DB::beginTransaction();
+    
+                if (File::exists($imagePath) && File::delete($imagePath)) {
+                    DB::delete("DELETE FROM ground_images WHERE ground_id = ? AND image_path = ?", [$data['ground_id'], $dbImage]);
+                    DB::commit();
+                    return true;
+                } else {
+                    DB::rollBack();
+                }
+            }
+
+            return false;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     public function deleteGroundData($data = [])
     {
         try {

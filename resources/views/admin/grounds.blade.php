@@ -52,11 +52,25 @@
 <script>
 $(document).ready(function () {
 
-    $('#groundTable').DataTable({
+    var table = $('#groundTable').DataTable({
         "columnDefs": [
             { "className": "text-start", "targets": 0 }
         ]
     });
+
+    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        var searchValue = $('#groundTable_wrapper input').val().toLowerCase(); // Get user input
+        
+        var rowData = data.join(' ').toLowerCase(); // Join all columns for search
+
+        var searchTerms = searchValue.split(' ');
+        return searchTerms.every(term => rowData.includes(term));
+    });
+
+    $('#groundTable_wrapper input').on('keyup', function () {
+        table.draw();
+    });
+
 
     $('.deleteDoc').on('click', function () {
         var groundId = $(this).data('id');

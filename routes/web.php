@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::any('/admin/delete-game', [AdminController::class, 'deletGame']);
     Route::any('/admin/get-game-data', [AdminController::class, 'getGameData']);
     Route::any('/admin/update-game', [AdminController::class, 'updateGameData']);
+    Route::any('/admin/delete-ground-image', [AdminController::class, 'deleteGroundImage']);
 
     Route::any('/admin/bookings', [AdminController::class, 'showBookings']);
 
