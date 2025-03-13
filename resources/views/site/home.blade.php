@@ -16,6 +16,33 @@
     }
 } 
 
+.top-content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+    gap: 10px; /* Space between boxes */
+    align-items: stretch; /* Ensures equal height */
+}
+
+.sports-box {
+    background: #FFF; /* White background */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers content vertically */
+    align-items: center; /* Centers content horizontally */
+    height: 100%; /* Ensures both boxes take full height */
+}
+
+/* Mobile: One column */
+@media (max-width: 600px) {
+    .top-content {
+        grid-template-columns: 1fr; /* One column */
+    }
+}
+
 </style>
 <!-- start of hero -->
 <section class="hero-section-s2">
@@ -88,16 +115,14 @@
                         </div>
                         <div class="content">
                             <div class="top-content">
-                                <ul>
-                                    <li>
-                                        <span>{{ $value->category_name }}</span>
-                                        <span class="date">{{ $value->ground_name }}</span>
-                                    </li>
-                                    <li>
-                                        <span>AED {{ $value->rate }}</span>
-                                        <span class="date">Per Hour</span>
-                                    </li>
-                                </ul>
+                                <div class="sports-box">
+                                    <span>{{ $value->category_name }}</span>
+                                    <span class="date">{{ $value->ground_name }}</span>
+                                </div>
+                                <div class="sports-box">
+                                    <span>AED {{ $value->rate }}</span>
+                                    <span class="date">Per Hour</span>
+                                </div>
                             </div>
                         </div>
                     </div>
