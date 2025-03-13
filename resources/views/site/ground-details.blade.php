@@ -131,6 +131,12 @@
     text-decoration: line-through;
     color: gray;
 }
+
+@media screen and (max-width: 600px) {
+    .booking-form-area{
+        max-width: unset;
+    }
+}
 </style>
 <!-- start of breadcumb-section -->
 <!-- <div class="wpo-breadcumb-area">
