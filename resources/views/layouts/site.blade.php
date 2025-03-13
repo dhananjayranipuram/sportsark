@@ -105,7 +105,7 @@
             <div class="wpo-upper-footer">
                 <div class="container">
                     <div class="row">
-                        <div class="col col-xl-5 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <div class="col col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="widget about-widget">
                                 <div class="logo widget-title">
                                     <img src="{{asset('assets/images/logofooter.png') }}" alt="blog">
@@ -141,7 +141,7 @@
                         </div>
                         
                         
-                        <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <div class="col col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="widget link-widget">
                                 <div class="widget-title">
                                     <h3>Grounds:</h3>
@@ -155,7 +155,7 @@
                             </div>
                         </div>
                        
-                        <div class="col col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                        <!-- <div class="col col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                             <div class="widget subscribe-widget">
                                 <div class="widget-title">
                                     <h3>subscribe newsletter:</h3>
@@ -170,7 +170,7 @@
 
                                 </form>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div> <!-- end container -->
             </div>
