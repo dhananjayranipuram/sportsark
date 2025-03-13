@@ -88,16 +88,16 @@
     }
 
     .sports-box {
-        background: #FFF; /* White background */
-        padding: 20px;
+        background: #FFF;
+        padding: 5px;
         border-radius: 12px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         text-align: center;
         display: flex;
         flex-direction: column;
-        justify-content: center; /* Centers content vertically */
-        align-items: center; /* Centers content horizontally */
-        height: 100%; /* Ensures both boxes take full height */
+        justify-content: center;
+        align-items: center;
+        height: 100%;
     }
 
     /* Mobile: One column */
@@ -172,11 +172,11 @@
                         <div class="content">
                             <div class="top-content">
                                 <div class="sports-box">
-                                    <span>{{ $value->category_name }}</span>
+                                    <h6>{{ $value->category_name }}</h6>
                                     <span class="date">{{ $value->ground_name }}</span>
                                 </div>
                                 <div class="sports-box">
-                                    <span>AED {{ $value->rate }}</span>
+                                    <h6>AED {{ $value->rate }}</h6>
                                     <span class="date">Per Hour</span>
                                 </div>
                             </div>
