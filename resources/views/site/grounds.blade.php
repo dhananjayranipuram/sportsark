@@ -251,11 +251,11 @@ function displayData() {
                                 <div class="content">
                                     <div class="top-content">
                                         <div class="sports-box">
-                                            <span>${ground.category_name}</span>
+                                            <h6>${ground.category_name}</h6>
                                             <span class="date">${ground.ground_name}</span>
                                         </div>
                                         <div class="sports-box">
-                                            <span>AED ${ground.rate}</span>
+                                            <h6>AED ${ground.rate}</h6>
                                             <span class="date">Per Hour</span>
                                         </div>
                                     </div>
