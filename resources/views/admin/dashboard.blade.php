@@ -132,6 +132,7 @@
                       <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Ground Name</th>
                         <th scope="col">Book Date</th>
                         <th scope="col">Time</th>
                         <th scope="col">Status</th>
@@ -142,6 +143,7 @@
                         <tr>
                             <td scope="row">{{$value->booking_id}}</td>
                             <td>{{$value->customer_name}}</td>
+                            <td>{{$value->ground_name}}</td>
                             <td>{{$value->book_date}}</td>
                             <td>{{$value->book_time}}</td>
                             <td><span class="badge bg-success">Booked</span></td>

@@ -176,6 +176,7 @@ $(document).ready(function () {
                             str += "<tr>";
                             str += "<td scope='row'>" + val.booking_id + "</td>";
                             str += "<td>" + val.customer_name + "</td>";
+                            str += "<td>" + val.ground_name + "</td>";
                             str += "<td>" + val.book_date + "</td>";
                             str += "<td>" + val.book_time + "</td>";
                             str += "<td><span class='badge bg-success'>Booked</span></td>";

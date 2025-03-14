@@ -93,7 +93,7 @@ class AdminController extends Controller
                 return response()->json(['error' => 'Invalid request'], 400);
                 break;
         }
-
+// echo '<pre>';print_r($data);exit;
         return response()->json($data);
         
 

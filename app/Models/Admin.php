@@ -309,6 +309,7 @@ class Admin extends Model
                 b.id AS booking_id, 
                 eu.name AS customer_name, 
                 eu.phone AS customer_mobile, 
+                g.name as ground_name,
                 DATE_FORMAT(b.book_date, '%d-%b-%Y') AS book_date, 
                 b.book_time 
             FROM booking b
