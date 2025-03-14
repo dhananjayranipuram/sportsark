@@ -339,10 +339,15 @@ function bookGround(data){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            
             $(".preloader").hide();
             generateTimeslot();
             setTimeout(function () {
-                window.location.href = baseUrl + '/booking-status/success';
+                var temp = '';
+                if (response.id) {
+                    temp = '/' + response.id;
+                }
+                window.location.href = baseUrl + '/booking-status/success' + temp;
             }, 2500);
         },
         error: function() {

@@ -62,7 +62,7 @@ Route::any('/verify-otp', [SiteController::class, 'verifyOtp']);
 Route::any('/verify-otp-login', [SiteController::class, 'verifyOtpLogin']);
 
 Route::any('/book-ground', [SiteController::class, 'bookGround']);
-Route::any('/booking-status/{status}', [SiteController::class, 'statusOfBooking']);
+Route::any('/booking-status/{status}/{id}', [SiteController::class, 'statusOfBooking']);
 
 //Clear Cache facade value:
 Route::get('/clear-cache', function() {

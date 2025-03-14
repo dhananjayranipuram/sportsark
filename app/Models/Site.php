@@ -141,12 +141,14 @@ class Site extends Model
     }
     
     public function saveGroundBookingData($data){
-        return DB::table('booking')->insert([
+        DB::table('booking')->insert([
             'ground_id' => $data['ground_id'],
             'user_id' => $data['userId'],
             'book_date' => $data['date'],
             'book_time' => $data['time']
         ]);
+
+        return DB::getPdo()->lastInsertId();
     }
     
     public function loginUser($data){
@@ -173,6 +175,23 @@ class Site extends Model
             LEFT JOIN enduser eu ON eu.id = b.user_id
             WHERE b.id = :id", 
             ['id' => $id]);
+    }
+
+    public function getBookingData($data) {
+        return DB::table('booking as b')
+            ->select([
+                'b.id',
+                'g.name as ground_name',
+                'gc.name as game_name',
+                DB::raw("DATE_FORMAT(b.book_date, '%d-%b-%Y') as book_date"),
+                DB::raw("TIME_FORMAT(b.book_time, '%h:%i %p') as book_time"),
+                'g.rate'
+            ])
+            ->leftJoin('grounds as g', 'g.id', '=', 'b.ground_id')
+            ->leftJoin('ground_category as gc', 'g.game_id', '=', 'gc.id')
+            ->where('b.id', $data['bookingId'])
+            ->where('b.user_id', $data['userId'])
+            ->first();
     }
     
 }

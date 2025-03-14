@@ -25,7 +25,8 @@
   <link href="{{asset('admin_assets/css/style.css')}}" rel="stylesheet">
   
   <link href="{{asset('admin_assets/css/daterangepicker.css')}}" rel="stylesheet">
-  <link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet">
+  <link href="{{asset('admin_assets/css/dataTables.dataTables.min.css')}}" rel="stylesheet">
+  
   <!-- =======================================================
   * Template Name: NiceAdmin
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -282,7 +283,12 @@
           <span>Dashboard</span>
         </a>
       </li>
-
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ url('/admin/bookings') }}">
+          <i class="bi bi-menu-button-wide"></i>
+          <span>Bookings</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="{{ url('/admin/ground-list') }}">
           <i class="bi bi-menu-button-wide"></i>
@@ -294,13 +300,6 @@
         <a class="nav-link collapsed" href="{{ url('/admin/games-list') }}">
           <i class="bi bi-menu-button-wide"></i>
           <span>Games</span>
-        </a>
-      </li>
-      
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ url('/admin/bookings') }}">
-          <i class="bi bi-menu-button-wide"></i>
-          <span>Bookings</span>
         </a>
       </li>
       
@@ -444,7 +443,7 @@
 
   <script src="{{asset('admin_assets/js/moment.min.js')}}"></script>
   <script src="{{asset('admin_assets/js/daterangepicker.min.js')}}"></script>
-  <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+  <script src="{{asset('admin_assets/js/dataTables.min.js')}}"></script>
 
   <script src="{{asset('admin_assets/js/dashboard.js')}}?v={{time()}}"></script>
 </body>

@@ -238,6 +238,7 @@ class SiteController extends Controller
             $emailData = $site->getEmailData($res);
             $this->sendEmails($emailData[0]);
             $response['status'] = '200';
+            $response['id'] = $res;
             $response['message'] = 'Ground booked succesfully.';
         }else{
             $response['status'] = '401';
@@ -252,8 +253,25 @@ class SiteController extends Controller
         Mail::to($emailData->email)->send(new BookingConfirmed($emailData,'customer'));
     }
 
-    public function statusOfBooking($status){
-        $data['status'] = $status;
+    public function statusOfBooking($status,$id){
+        $site = new Site();
+        $credentials['bookingId'] = $id;
+        $credentials['userId'] = Session::get('login-data');
+        $data = $site->getBookingData($credentials);
+        if ($data) {
+            $data = (array) $data;
+            $data['status'] = $status;
+        } else {
+            $data = [
+                'id' => 'N/A',
+                'ground_name' => 'N/A',
+                'game_name' => 'N/A',
+                'book_date' => 'N/A',
+                'book_time' => 'N/A',
+                'rate' => '0.00',
+                'status' => $status,
+            ];
+        }
         return view('site/booking-status',$data);
     }
 }
