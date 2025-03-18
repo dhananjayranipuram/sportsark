@@ -109,6 +109,10 @@
       width: initial;
     }
   }
+
+  .dt-length label {
+      display: none !important; /* Hides the entire label including text */
+  }
   </style>
 </head>
 
@@ -307,6 +311,13 @@
         <a class="nav-link collapsed" href="{{ url('/admin/reports') }}">
           <i class="bi bi-menu-button-wide"></i>
           <span>Reports</span>
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ url('/admin/customers') }}">
+          <i class="bi bi-menu-button-wide"></i>
+          <span>Customers</span>
         </a>
       </li>
       

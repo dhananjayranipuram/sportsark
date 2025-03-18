@@ -42,6 +42,8 @@ class AdminController extends Controller
             ];
             
             $data['doc_appt'] = $admin->getGroundWiseBookingData($input);
+
+            $data['games'] = $admin->getGames();
             // echo '<pre>';print_r($data);exit;
             return view('admin/dashboard',$data);
         }
@@ -93,6 +95,7 @@ class AdminController extends Controller
                 return response()->json(['error' => 'Invalid request'], 400);
                 break;
         }
+        $data['games'] = $admin->getGames();
 // echo '<pre>';print_r($data);exit;
         return response()->json($data);
         
@@ -445,4 +448,34 @@ class AdminController extends Controller
         }
     }
 
+    public function showCustomers(){
+
+        $admin = new Admin();
+        $data['customers'] = $admin->getCustomerList();
+        return view('admin/customers',$data);
+    }
+
+    public function updateCustomerStatus(Request $request)
+    {
+        $admin = new Admin();
+        if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'id' => 'required',
+                'status' => 'required|in:0,1'
+            ]);
+
+            $updateStatus = $admin->UpdateCustomerStatus($validated);
+            if ($updateStatus) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Customer status updated successfully!',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Error updating the customer status.',
+                ]);
+            }
+        }
+    }
 }

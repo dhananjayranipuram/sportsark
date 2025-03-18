@@ -81,8 +81,8 @@ class Admin extends Model
 
         return DB::select("SELECT 
                             b.id AS booking_id, 
-                            b.book_date,
-                            b.book_time,
+                            DATE_FORMAT(b.book_date, '%d-%m-%Y') AS book_date,
+                            TIME_FORMAT(b.book_time, '%h:%i %p') as book_time,
                             g.name AS 'ground_name',
                             gc.name AS 'game_name'
                         FROM booking b
@@ -311,10 +311,13 @@ class Admin extends Model
                 eu.phone AS customer_mobile, 
                 g.name as ground_name,
                 DATE_FORMAT(b.book_date, '%d-%b-%Y') AS book_date, 
-                b.book_time 
+                b.book_time,
+                gc.id AS game_id,
+                gc.name AS game_name
             FROM booking b
             LEFT JOIN grounds g ON g.id = b.ground_id
             LEFT JOIN enduser eu ON eu.id = b.user_id
+            LEFT JOIN ground_category gc ON gc.id=g.game_id
             WHERE (b.book_date BETWEEN ? AND ?) 
             AND b.status > -1
             ORDER BY b.book_date ASC
@@ -400,4 +403,18 @@ class Admin extends Model
         ", [$data['from'], $data['to']]);
     }
 
+    public function getCustomerList()
+    {
+        return DB::table('enduser')
+            ->select('id', 'name', 'email', 'phone')
+            ->selectRaw("CASE WHEN active = 1 THEN 'Active' ELSE 'Inactive' END as status")
+            ->where('deleted', 0)
+            ->get();
+    }
+
+    public function UpdateCustomerStatus($data){
+        return DB::table('enduser')
+                    ->where('id', $data['id'])
+                    ->update(['active' => $data['status']]);
+    }
 }

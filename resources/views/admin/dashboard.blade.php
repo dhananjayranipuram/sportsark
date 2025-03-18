@@ -132,6 +132,7 @@
                       <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Game Name</th>
                         <th scope="col">Ground Name</th>
                         <th scope="col">Book Date</th>
                         <th scope="col">Time</th>
@@ -140,9 +141,10 @@
                     </thead>
                     <tbody>
                         @foreach($list as $key => $value)
-                        <tr>
+                        <tr data-game-id="{{$value->game_id}}">
                             <td scope="row">{{$value->booking_id}}</td>
                             <td>{{$value->customer_name}}</td>
+                            <td>{{$value->game_name}}</td>
                             <td>{{$value->ground_name}}</td>
                             <td>{{$value->book_date}}</td>
                             <td>{{$value->book_time}}</td>
@@ -243,7 +245,47 @@
 
 <script>
 $(document).ready(function () { 
-    $("#recent-appt").DataTable();
+    $("#recent-appt").DataTable({
+      dom: "<'dt-layout-row'<'col-sm-4'l><'col-sm-4 text-center'<'custom-filter'>><'col-sm-4'f>>" + 
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        paging: true,
+        searching: true,
+        lengthChange: true
+    });
+
+    var filterOptions = '<select id="customFilterDropdown" class="form-control" style="width: 200px; margin-right: 10px;">';
+    filterOptions += '<option value="">Show All</option>';
+    
+    @foreach($games as $value)
+        filterOptions += '<option value="{{ $value->game_id }}">{{ $value->game_name }}</option>';
+    @endforeach
+
+    filterOptions += '</select>';
+
+    $(".custom-filter").html(filterOptions);
+
+    $.fn.dataTable.ext.search = [];
+
+    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        var selectedGameId = $("#customFilterDropdown").val(); // Selected game ID from dropdown
+        var rowGameId = $("#recent-appt tbody tr").eq(dataIndex).attr("data-game-id"); // Row game ID
+
+        // Ensure both values are treated as strings for correct comparison
+        if (selectedGameId === "" || String(rowGameId) === String(selectedGameId)) {
+            return true; // Show row if it matches
+        }else{
+            return false; // Hide row if it does not match
+        }
+    });
+
+    // Ensure Dropdown Change Event is Properly Bound
+    $(document).off("change", "#customFilterDropdown").on("change", "#customFilterDropdown", function () {
+        $("#recent-appt").DataTable().draw();
+    });
+    $("#customSearchBox").on("keyup", function () {
+        table.search(this.value).draw();
+    });
 });
 </script>
 

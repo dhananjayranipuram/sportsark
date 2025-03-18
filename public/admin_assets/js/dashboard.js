@@ -173,9 +173,10 @@ $(document).ready(function () {
                     var str = "";
                     if (html.list.length > 0) {
                         $.each(html.list, function (key, val) {
-                            str += "<tr>";
+                            str += "<tr data-game-id='" + val.game_id + "'>";
                             str += "<td scope='row'>" + val.booking_id + "</td>";
                             str += "<td>" + val.customer_name + "</td>";
+                            str += "<td>" + val.game_name + "</td>";
                             str += "<td>" + val.ground_name + "</td>";
                             str += "<td>" + val.book_date + "</td>";
                             str += "<td>" + val.book_time + "</td>";
@@ -183,13 +184,54 @@ $(document).ready(function () {
                             str += "</tr>";
                         });
                     } else {
-                        str += "<tr><td colspan='5' class='text-center'>No Bookings Found</td></tr>";
+                        str += "<tr><td colspan='7' class='text-center'>No Bookings Found</td></tr>";
                     }
     
+                    // Destroy existing DataTable and recreate
                     var table = $("#recent-appt").DataTable();
                     table.clear().destroy();
                     $("#recent-appt tbody").html(str);
-                    $("#recent-appt").DataTable();
+    
+                    table = $("#recent-appt").DataTable({
+                        dom: "<'dt-layout-row'<'col-sm-4'l><'col-sm-4 text-center'<'custom-filter'>><'col-sm-4'f>>" +
+                            "<'row'<'col-sm-12'tr>>" +
+                            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                        paging: true,
+                        searching: true,
+                        lengthChange: true
+                    });
+    
+                    // Populate Filter Dropdown
+                    var filterOptions = '<select id="customFilterDropdown" class="form-control" style="width: 200px; margin-right: 10px;">';
+                    filterOptions += '<option value="">Show All</option>';
+    
+                    if (html.games && html.games.length > 0) {
+                        $.each(html.games, function (index, game) {
+                            filterOptions += '<option value="' + game.game_id + '">' + game.game_name + '</option>';
+                        });
+                    }
+                    filterOptions += '</select>';
+    
+                    $(".custom-filter").html(filterOptions);
+    
+                    $.fn.dataTable.ext.search = [];
+
+                    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                        var selectedGameId = $("#customFilterDropdown").val(); // Selected game ID from dropdown
+                        var rowGameId = $("#recent-appt tbody tr").eq(dataIndex).attr("data-game-id"); // Row game ID
+
+                        // Ensure both values are treated as strings for correct comparison
+                        if (selectedGameId === "" || String(rowGameId) === String(selectedGameId)) {
+                            return true; // Show row if it matches
+                        }
+                        return false; // Hide row if it does not match
+                    });
+
+                    // Ensure Dropdown Change Event is Properly Bound
+                    $(document).off("change", "#customFilterDropdown").on("change", "#customFilterDropdown", function () {
+                        $("#recent-appt").DataTable().draw();
+                    });
+    
                 } else {
                     console.error("Invalid response format:", html);
                 }
@@ -200,8 +242,10 @@ $(document).ready(function () {
             },
             complete: function () {
                 $(".overlay").hide();
-            },
+            }
         });
     });
+    
+    
     
 });

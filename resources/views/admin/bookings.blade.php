@@ -68,10 +68,10 @@
                             <td>{{$value->game_name}}</td>
                             <td>{{$value->book_date}}</td>
                             <td>{{$value->book_time}}</td>
-                            <td><div >
+                            <!-- <td><div > -->
                               <!-- <a href="{{ url('/admin/edit-booking') }}?id={{$value->booking_id}}" class="btn btn-default"><i class="fa fa-edit"></i></a> -->
                               <!-- <a href="#" class="btn btn-default deleteBooking" data-id="{{$value->booking_id}}"><i class="fa fa-trash"></i></a> -->
-                            </div></td>
+                            <!-- </div></td> -->
                         </tr>
                     @endforeach
                 </tbody>
@@ -162,6 +162,15 @@
             setTimeout(function () {
                 $(".needs-validation").submit();
             }, 200);
+        });
+        $('.datatable').DataTable({
+            paging: true,
+            info: true,
+            searching: false,
+            lengthChange: false,
+            "columnDefs": [
+                { "className": "text-start", "targets": 0 }
+            ]
         });
     });
     </script>    

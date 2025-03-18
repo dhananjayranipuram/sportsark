@@ -220,14 +220,26 @@ $(function() {
 });
 $(document).ready(function () {
     $("#multi-filter-select").DataTable({
+        paging: true,
+        info: true,
+        searching: false,
+        lengthChange: false,
         pageLength: 5,
         
     });
     $("#multi-filter-select-brand").DataTable({
+        paging: true,
+        info: true,
+        searching: false,
+        lengthChange: false,
         pageLength: 5,
         
     });
     $("#multi-filter-select-type").DataTable({
+        paging: true,
+        info: true,
+        searching: false,
+        lengthChange: false,
         pageLength: 5,
         
     });
