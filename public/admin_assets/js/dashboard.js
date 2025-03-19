@@ -151,101 +151,87 @@ $(document).ready(function () {
     });
     
 
+    $(document).on("change", "#customFilterDropdown", function () {
+        var dayValue = $("#recent-appt-period").val();
+        var gameId = $("#customFilterDropdown").val();
+        fetchAndBuildDataTable(dayValue, gameId);
+    });
+
     $(document).on("click", ".recent-appt", function (e) {
         $(".overlay").show();
-    
         var dayValue = $(this).attr("data-value");
-    
-        $.ajax({
-            url: baseUrl + "/admin/get-dashboard-booking-data",
-            type: "POST",
-            data: { period: dayValue, card: "recent-appt" },
-            headers: { "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content") },
-            success: function (html) {
-                if (html && html.list) {
-                    var labelMap = {
-                        today: "| Today",
-                        thismonth: "| This Month",
-                        thisyear: "| This Year",
-                    };
-                    $(".recent-appt-day-label").html(labelMap[dayValue] || "");
-    
-                    var str = "";
-                    if (html.list.length > 0) {
-                        $.each(html.list, function (key, val) {
-                            str += "<tr data-game-id='" + val.game_id + "'>";
-                            str += "<td scope='row'>" + val.booking_id + "</td>";
-                            str += "<td>" + val.customer_name + "</td>";
-                            str += "<td>" + val.game_name + "</td>";
-                            str += "<td>" + val.ground_name + "</td>";
-                            str += "<td>" + val.book_date + "</td>";
-                            str += "<td>" + val.book_time + "</td>";
-                            str += "<td><span class='badge bg-success'>Booked</span></td>";
-                            str += "</tr>";
-                        });
-                    } else {
-                        str += "<tr><td colspan='7' class='text-center'>No Bookings Found</td></tr>";
-                    }
-    
-                    // Destroy existing DataTable and recreate
-                    var table = $("#recent-appt").DataTable();
-                    table.clear().destroy();
-                    $("#recent-appt tbody").html(str);
-    
-                    table = $("#recent-appt").DataTable({
-                        dom: "<'dt-layout-row'<'col-sm-4'l><'col-sm-4 text-center'<'custom-filter'>><'col-sm-4'f>>" +
-                            "<'row'<'col-sm-12'tr>>" +
-                            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                        paging: true,
-                        searching: true,
-                        lengthChange: true
-                    });
-    
-                    // Populate Filter Dropdown
-                    var filterOptions = '<select id="customFilterDropdown" class="form-control" style="width: 200px; margin-right: 10px;">';
-                    filterOptions += '<option value="">Show All</option>';
-    
-                    if (html.games && html.games.length > 0) {
-                        $.each(html.games, function (index, game) {
-                            filterOptions += '<option value="' + game.game_id + '">' + game.game_name + '</option>';
-                        });
-                    }
-                    filterOptions += '</select>';
-    
-                    $(".custom-filter").html(filterOptions);
-    
-                    $.fn.dataTable.ext.search = [];
-
-                    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                        var selectedGameId = $("#customFilterDropdown").val(); // Selected game ID from dropdown
-                        var rowGameId = $("#recent-appt tbody tr").eq(dataIndex).attr("data-game-id"); // Row game ID
-
-                        // Ensure both values are treated as strings for correct comparison
-                        if (selectedGameId === "" || String(rowGameId) === String(selectedGameId)) {
-                            return true; // Show row if it matches
-                        }
-                        return false; // Hide row if it does not match
-                    });
-
-                    // Ensure Dropdown Change Event is Properly Bound
-                    $(document).off("change", "#customFilterDropdown").on("change", "#customFilterDropdown", function () {
-                        $("#recent-appt").DataTable().draw();
-                    });
-    
-                } else {
-                    console.error("Invalid response format:", html);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error:", error);
-                alert("Something went wrong. Please try again.");
-            },
-            complete: function () {
-                $(".overlay").hide();
-            }
-        });
+        var gameId = $("#customFilterDropdown").val();
+        $("#recent-appt-period").val(dayValue);
+        fetchAndBuildDataTable(dayValue, gameId);
     });
-    
-    
-    
 });
+
+function fetchAndBuildDataTable(dayValue, gameId){
+    $.ajax({
+        url: baseUrl + "/admin/get-dashboard-booking-data",
+        type: "POST",
+        data: { period: dayValue, card: "recent-appt", gameId: gameId },
+        headers: { "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content") },
+        success: function (html) {
+            if (html && html.list) {
+                var labelMap = {
+                    today: "| Today",
+                    thismonth: "| This Month",
+                    thisyear: "| This Year",
+                };
+                $(".recent-appt-day-label").html(labelMap[dayValue] || "");
+
+                var str = "";
+                if (html.list.length > 0) {
+                    $.each(html.list, function (key, val) {
+                        str += "<tr>";
+                        str += "<td scope='row'>" + val.booking_id + "</td>";
+                        str += "<td>" + val.customer_name + "</td>";
+                        str += "<td>" + val.game_name + "</td>";
+                        str += "<td>" + val.ground_name + "</td>";
+                        str += "<td>" + val.book_date + "</td>";
+                        str += "<td>" + val.book_time + "</td>";
+                        str += "<td><span class='badge bg-success'>Booked</span></td>";
+                        str += "</tr>";
+                    });
+                }
+
+                var table = $("#recent-appt").DataTable();
+                table.clear().destroy();
+                $("#recent-appt tbody").html(str);
+
+                table = $("#recent-appt").DataTable({
+                    dom: "<'dt-layout-row'<'col-sm-4'l><'col-sm-4 text-center'<'custom-filter'>><'col-sm-4'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                    paging: true,
+                    searching: true,
+                    lengthChange: true
+                });
+
+                var filterOptions = '<select id="customFilterDropdown" class="form-control" style="width: 200px; margin-right: 10px;">';
+                filterOptions += '<option value="">Show All</option>';
+
+                if (html.games && html.games.length > 0) {
+                    $.each(html.games, function (index, game) {
+                        var selected = (game.game_id == gameId) ? 'selected' : '';
+                        filterOptions += '<option value="' + game.game_id + '"' + selected + '>' + game.game_name + '</option>';
+                    });
+                }
+                filterOptions += '</select>';
+
+                $(".custom-filter").html(filterOptions);
+
+            } else {
+                console.error("Invalid response format:", html);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX Error:", error);
+            alert("Something went wrong. Please try again.");
+        },
+        complete: function () {
+            $(".overlay").hide();
+        }
+    });
+}

@@ -68,7 +68,7 @@ class AdminController extends Controller
                 $input = ['from' => date('Y-m-d'),'to' => date('Y-m-d'),'prev_from' => date('Y-m-d',strtotime("-1 days")),'prev_to' => date('Y-m-d',strtotime("-1 days"))]; //Today's data
                 break;
         }
-        // print_r($input);exit;
+
         $data = [];
         switch ($card) {
             case 'booking-count':
@@ -89,6 +89,7 @@ class AdminController extends Controller
                 $data['doc_appt'] = $admin->getGroundWiseBookingData($input);
                 break;
             case 'recent-appt':
+                $input['gameId'] = $request->post('gameId');
                 $data['list'] = $admin->getLatestBookingData($input);
                 break;
             default:
@@ -96,7 +97,7 @@ class AdminController extends Controller
                 break;
         }
         $data['games'] = $admin->getGames();
-// echo '<pre>';print_r($data);exit;
+
         return response()->json($data);
         
 

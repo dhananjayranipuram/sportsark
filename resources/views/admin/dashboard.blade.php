@@ -122,6 +122,7 @@
                     <li><a class="dropdown-item recent-appt" data-value="thismonth" href="#">This Month</a></li>
                     <li><a class="dropdown-item recent-appt" data-value="thisyear" href="#">This Year</a></li>
                   </ul>
+                  <input type="hidden" id="recent-appt-period" value="today">
                 </div>
 
                 <div class="card-body">
@@ -141,7 +142,7 @@
                     </thead>
                     <tbody>
                         @foreach($list as $key => $value)
-                        <tr data-game-id="{{$value->game_id}}">
+                        <tr>
                             <td scope="row">{{$value->booking_id}}</td>
                             <td>{{$value->customer_name}}</td>
                             <td>{{$value->game_name}}</td>
@@ -264,28 +265,6 @@ $(document).ready(function () {
     filterOptions += '</select>';
 
     $(".custom-filter").html(filterOptions);
-
-    $.fn.dataTable.ext.search = [];
-
-    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-        var selectedGameId = $("#customFilterDropdown").val(); // Selected game ID from dropdown
-        var rowGameId = $("#recent-appt tbody tr").eq(dataIndex).attr("data-game-id"); // Row game ID
-
-        // Ensure both values are treated as strings for correct comparison
-        if (selectedGameId === "" || String(rowGameId) === String(selectedGameId)) {
-            return true; // Show row if it matches
-        }else{
-            return false; // Hide row if it does not match
-        }
-    });
-
-    // Ensure Dropdown Change Event is Properly Bound
-    $(document).off("change", "#customFilterDropdown").on("change", "#customFilterDropdown", function () {
-        $("#recent-appt").DataTable().draw();
-    });
-    $("#customSearchBox").on("keyup", function () {
-        table.search(this.value).draw();
-    });
 });
 </script>
 
