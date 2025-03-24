@@ -1,6 +1,17 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+.table {
+    width: 100%;
+    min-width: 600px; /* Prevents column collapsing */
+    border-collapse: collapse;
+}
+</style>
 <section class="section">
     <div class="row">
         <div class="col-lg-12">
@@ -15,33 +26,35 @@
                     @endif
                     
                     <!-- Table with stripped rows -->
-                    <table class="table datatable" id="customerTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Status</th>
-                                <th>Select</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($customers as $key => $value)
-                                <tr >
-                                    <td>{{$value->id}}</td>
-                                    <td>{{$value->name}}</td>
-                                    <td>{{$value->email}}</td>
-                                    <td>{{$value->phone}}</td>
-                                    <td><span id="status-{{ $value->id }}" class="badge {{ $value->status == 'Active' ? 'bg-success' : 'bg-secondary' }}">
-                                            {{ $value->status }}
-                                        </span></td>
-                                    <td><input type="checkbox" class="user-status" data-id="{{ $value->id }}" 
-                                    {{ $value->status == 'Active' ? 'checked' : '' }}></td>
+                    <div class="table-responsive">
+                        <table class="table datatable" id="customerTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Select</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($customers as $key => $value)
+                                    <tr >
+                                        <td>{{$value->id}}</td>
+                                        <td>{{$value->name}}</td>
+                                        <td>{{$value->email}}</td>
+                                        <td>{{$value->phone}}</td>
+                                        <td><span id="status-{{ $value->id }}" class="badge {{ $value->status == 'Active' ? 'bg-success' : 'bg-secondary' }}">
+                                                {{ $value->status }}
+                                            </span></td>
+                                        <td><input type="checkbox" class="user-status" data-id="{{ $value->id }}" 
+                                        {{ $value->status == 'Active' ? 'checked' : '' }}></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- End Table with stripped rows -->
 
                 </div>

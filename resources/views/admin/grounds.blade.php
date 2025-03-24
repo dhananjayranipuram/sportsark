@@ -1,6 +1,17 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+.table {
+    width: 100%;
+    min-width: 600px; /* Prevents column collapsing */
+    border-collapse: collapse;
+}
+</style>
 <section class="section">
     <div class="row">
         <div class="col-lg-12">
@@ -15,31 +26,33 @@
                     @endif
                     <div style="text-align: right;"><a style="padding-right: 10px;" href="{{ url('/admin/add-ground') }}" class="addNew"><i class="bi bi-person-plus"></i> Add New Ground</a></div>
                     <!-- Table with stripped rows -->
-                    <table class="table datatable" id="groundTable">
-                        <thead>
-                            <tr>
-                            <th >Ground ID</th>
-                            <th>Name</th>
-                            <th>Rate</th>
-                            <th>Category</th>
-                            <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($grounds as $key => $value)
-                                <tr >
-                                    <td>{{$value->ground_id}}</td>
-                                    <td>{{$value->ground_name}}</td>
-                                    <td>{{$value->rate}}</td>
-                                    <td>{{$value->category_name}}</td>
-                                    <td><div >
-                                        <a href="{{ url('/admin/edit-ground') }}/{{$value->ground_id}}" class="btn btn-default"><i class="fa fa-edit"></i></a>
-                                        <a href="#" class="btn btn-default deleteDoc" data-id="{{$value->ground_id}}"><i class="fa fa-trash"></i></a>
-                                    </div></td>
+                    <div class="table-responsive">
+                        <table class="table datatable" id="groundTable">
+                            <thead>
+                                <tr>
+                                <th >Ground ID</th>
+                                <th>Name</th>
+                                <th>Rate</th>
+                                <th>Category</th>
+                                <th>Actions</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($grounds as $key => $value)
+                                    <tr >
+                                        <td>{{$value->ground_id}}</td>
+                                        <td>{{$value->ground_name}}</td>
+                                        <td>{{$value->rate}}</td>
+                                        <td>{{$value->category_name}}</td>
+                                        <td><div >
+                                            <a href="{{ url('/admin/edit-ground') }}/{{$value->ground_id}}" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                                            <a href="#" class="btn btn-default deleteDoc" data-id="{{$value->ground_id}}"><i class="fa fa-trash"></i></a>
+                                        </div></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- End Table with stripped rows -->
 
                 </div>

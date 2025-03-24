@@ -1,7 +1,17 @@
 @extends('layouts.admin')
 
 @section('content')
-
+<style>
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+.table {
+    width: 100%;
+    min-width: 600px; /* Prevents column collapsing */
+    border-collapse: collapse;
+}
+</style>
 <section class="section">
       <div class="row">
         <div class="col-lg-12">
@@ -49,33 +59,35 @@
                 </form>
               <!-- </div> -->
               <!-- Table with stripped rows -->
-              <table class="table datatable">
-                <thead>
-                  <tr>
-                    <th>Booking ID</th>
-                    <th>Ground Name</th>
-                    <th>Game Name</th>
-                    <th data-type="date" data-format="YYYY/MM/DD">Booked Date</th>
-                    <th>Booked Time</th>
-                    <!-- <th style="min-width:110px;">Action</th> -->
-                  </tr>
-                </thead>
-                <tbody>
-                    @foreach($bookings as $key => $value)
-                        <tr>
-                            <td>{{$value->booking_id}}</td>
-                            <td>{{$value->ground_name}}</td>
-                            <td>{{$value->game_name}}</td>
-                            <td>{{$value->book_date}}</td>
-                            <td>{{$value->book_time}}</td>
-                            <!-- <td><div > -->
-                              <!-- <a href="{{ url('/admin/edit-booking') }}?id={{$value->booking_id}}" class="btn btn-default"><i class="fa fa-edit"></i></a> -->
-                              <!-- <a href="#" class="btn btn-default deleteBooking" data-id="{{$value->booking_id}}"><i class="fa fa-trash"></i></a> -->
-                            <!-- </div></td> -->
-                        </tr>
-                    @endforeach
-                </tbody>
-              </table>
+                <div class="table-responsive">
+                  <table class="table datatable">
+                    <thead>
+                      <tr>
+                        <th>Booking ID</th>
+                        <th>Ground Name</th>
+                        <th>Game Name</th>
+                        <th data-type="date" data-format="YYYY/MM/DD">Booked Date</th>
+                        <th>Booked Time</th>
+                        <!-- <th style="min-width:110px;">Action</th> -->
+                      </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($bookings as $key => $value)
+                            <tr>
+                                <td>{{$value->booking_id}}</td>
+                                <td>{{$value->ground_name}}</td>
+                                <td>{{$value->game_name}}</td>
+                                <td>{{$value->book_date}}</td>
+                                <td>{{$value->book_time}}</td>
+                                <!-- <td><div > -->
+                                  <!-- <a href="{{ url('/admin/edit-booking') }}?id={{$value->booking_id}}" class="btn btn-default"><i class="fa fa-edit"></i></a> -->
+                                  <!-- <a href="#" class="btn btn-default deleteBooking" data-id="{{$value->booking_id}}"><i class="fa fa-trash"></i></a> -->
+                                <!-- </div></td> -->
+                            </tr>
+                        @endforeach
+                    </tbody>
+                  </table>
+                </div>
               <!-- End Table with stripped rows -->
 
             </div>

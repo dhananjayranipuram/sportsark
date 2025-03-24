@@ -1,6 +1,17 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+.table {
+    width: 100%;
+    min-width: 600px; /* Prevents column collapsing */
+    border-collapse: collapse;
+}
+</style>
 <section class="section">
     <div class="row">
         <div class="col-lg-12">
@@ -15,29 +26,31 @@
                     @endif
                     <div style="text-align: right;"><a style="padding-right: 10px;" href="{{ url('/admin/add-games') }}" class="addNew" data-bs-toggle="modal" data-bs-target="#addGameModal"><i class="bi bi-person-plus"></i> Add New Game</a></div>
                     <!-- Table with stripped rows -->
-                    <table class="table datatable" id="gameTable">
-                        <thead>
-                            <tr>
-                            <th>Game ID</th>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th style="width: 20%; text-align: center;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($games as $key => $value)
-                                <tr >
-                                    <td>{{$value->game_id}}</td>
-                                    <td>{{$value->game_name}}</td>
-                                    <td>{{$value->status}}</td>
-                                    <td style="width: 20%; text-align: center;"><div >
-                                        <a href="#" class="btn btn-default edit-game" data-id="{{$value->game_id}}"><i class="fa fa-edit"></i></a>
-                                        <a href="#" class="btn btn-default deleteGame" data-id="{{$value->game_id}}"><i class="fa fa-trash"></i></a>
-                                    </div></td>
+                    <div class="table-responsive">
+                        <table class="table datatable" id="gameTable">
+                            <thead>
+                                <tr>
+                                <th>Game ID</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th style="width: 20%; text-align: center;">Actions</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($games as $key => $value)
+                                    <tr >
+                                        <td>{{$value->game_id}}</td>
+                                        <td>{{$value->game_name}}</td>
+                                        <td>{{$value->status}}</td>
+                                        <td style="width: 20%; text-align: center;"><div >
+                                            <a href="#" class="btn btn-default edit-game" data-id="{{$value->game_id}}"><i class="fa fa-edit"></i></a>
+                                            <a href="#" class="btn btn-default deleteGame" data-id="{{$value->game_id}}"><i class="fa fa-trash"></i></a>
+                                        </div></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- End Table with stripped rows -->
 
                 </div>
