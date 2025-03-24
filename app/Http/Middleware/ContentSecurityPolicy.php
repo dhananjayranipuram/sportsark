@@ -17,17 +17,18 @@ class ContentSecurityPolicy
     {
         $response = $next($request);
 
-        $csp = "default-src 'self'; "
-             . "base-uri 'self'; "
-             . "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
-             . "object-src 'none'; "
-             . "style-src 'self' 'unsafe-inline'; "
-             . "img-src 'self' data:; "
-             . "font-src 'self' data:; "
-             . "frame-ancestors 'none'; "
-             . "form-action 'self';";
-
-        $response->headers->set('Content-Security-Policy', $csp);
+        $response->headers->set('Content-Security-Policy', 
+            "default-src 'self'; 
+            script-src 'self' 'unsafe-inline' 'unsafe-eval' https://trusted-scripts.com;
+            style-src 'self' 'unsafe-inline' https://trusted-styles.com;
+            img-src 'self' data:;
+            object-src 'none';
+            base-uri 'self';
+            frame-ancestors 'none';
+            form-action 'self';
+            upgrade-insecure-requests;
+            block-all-mixed-content;"
+        );
 
         return $response;
     }
