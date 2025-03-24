@@ -17,18 +17,22 @@ class ContentSecurityPolicy
     {
         $response = $next($request);
 
-        $response->headers->set('Content-Security-Policy', 
-            "default-src 'self'; 
-            script-src 'self' 'unsafe-inline' 'unsafe-eval' https://trusted-scripts.com;
-            style-src 'self' 'unsafe-inline' https://trusted-styles.com;
-            img-src 'self' data:;
-            object-src 'none';
-            base-uri 'self';
-            frame-ancestors 'none';
-            form-action 'self';
-            upgrade-insecure-requests;
-            block-all-mixed-content;"
-        );
+        $csp = "
+                default-src 'self'; 
+                script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connectark.com/dev.sportsark/public/; 
+                style-src 'self' 'unsafe-inline' https://connectark.com/dev.sportsark/public/; 
+                img-src 'self' data:; 
+                object-src 'none'; 
+                base-uri 'self'; 
+                frame-ancestors 'none'; 
+                form-action 'self'; 
+                upgrade-insecure-requests; 
+                block-all-mixed-content;
+            ";
+
+            $csp = trim(preg_replace('/\s+/', ' ', $csp));
+
+            $response->headers->set('Content-Security-Policy', $csp);
 
         return $response;
     }

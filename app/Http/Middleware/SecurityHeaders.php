@@ -17,9 +17,13 @@ class SecurityHeaders
     {
         $response = $next($request);
 
+        $csp = "default-src 'self'; script-src 'self' https://example.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests; block-all-mixed-content;";
+        
+        $response->headers->set('Content-Security-Policy', trim(preg_replace('/\s+/', ' ', $csp)));
         $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+
         
         return $response;
     }
