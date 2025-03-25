@@ -282,8 +282,12 @@ $(document).ready(function () {
     }
     if (encodedTime) {
         var decodedTime = atob(encodedTime);
-        $("#time").val(decodedTime);
-        $("#time").niceSelect('update');
+        
+        setTimeout(function () {
+            $("#time").val(decodedTime);
+            $("#time").niceSelect('update');
+        }, 250);
+        
     }
 
     generateTimeslot();

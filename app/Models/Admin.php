@@ -453,4 +453,10 @@ class Admin extends Model
                     ->where('id', $data['id'])
                     ->update(['active' => $data['status']]);
     }
+    
+    public function updatePassword($data){
+        return DB::table('users')
+                    ->where('id', $data['id'])
+                    ->update(['password' => bcrypt($data['new'])]);
+    }
 }

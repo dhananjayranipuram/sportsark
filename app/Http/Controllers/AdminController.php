@@ -537,4 +537,43 @@ class AdminController extends Controller
             }
         }
     }
+
+    public function changePassword(Request $request){
+        $admin = new Admin();
+        if ($request->isMethod('post')) {
+            $validator = $request->validate([
+                'old' => 'required',
+                'new' => 'required|min:8',
+                'confirm' => 'required|same:new',
+            ]);
+            
+            if (session()->has('userAdminData')) {
+                $validator['email'] = session('userAdminData.email');
+                $validator['id'] = session('userAdminData.id');
+            }
+
+            if (Auth::attempt(['email' => $validator['email'], 'password' => $validator['old']])) {
+                $update = $admin->updatePassword($validator);
+                if ($update) {
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Password updated successfully!',
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Error on updating password.',
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'status' => 422,
+                    'errors' => ['old' => ['Old password is incorrect']],
+                ], 422);
+            }
+
+        }else{
+            return view('admin/change-password');
+        }
+    }
 }

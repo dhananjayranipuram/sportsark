@@ -11,7 +11,13 @@ use Session;
 
 class SiteController extends Controller
 {
-    
+    public function __construct()
+    {
+        $site = new Site();
+        $games = $site->getGames();
+        view()->share('footergames', $games);
+    }
+
     public function home(){
         
         $site = new Site();

@@ -112,6 +112,23 @@
         max-width: unset;
     }
 }
+
+.no-grounds {
+    text-align: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.no-grounds i {
+    font-size: 50px;
+    color: gray;
+}
+
+.no-grounds p {
+    font-size: 18px;
+    color: red;
+    margin-top: 10px;
+}
 </style>
 <!-- start of breadcumb-section -->
 <!-- <div class="wpo-breadcumb-area">
@@ -235,8 +252,12 @@ function displayData() {
         success: function(res) {
 
             if (!res.grounds || res.grounds.length === 0) {
-                console.warn("No grounds available.");
-                $(".gallery-container").html("<p>No grounds available.</p>");
+                // console.warn("No grounds available.");
+                var str = '<div class="no-grounds">'
+                            +'<i class="fa fa-landmark"></i>'
+                            +'<p>No Grounds Available</p>'
+                        +'</div>';
+                $(".gallery-container").html(str);
                 return;
             }
 

@@ -53,6 +53,8 @@ Route::middleware('auth')->group(function () {
 
     Route::any('/admin/register', [AdminController::class, 'registration']);
 
+    Route::any('/admin/change-password', [AdminController::class, 'changePassword']);
+
     Route::any('/admin/logout', [LoginController::class, 'logout']);
 
 });

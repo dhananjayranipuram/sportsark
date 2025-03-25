@@ -113,6 +113,10 @@
   .dt-length label {
       display: none !important; /* Hides the entire label including text */
   }
+
+  .dropdown-item {
+    cursor: pointer;
+}
   </style>
 </head>
 
@@ -240,16 +244,23 @@
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header"><h6>
-              @if(isset(Session::get('userAdminData')->name))         
-                {{Session::get('userAdminData')->name}}
+            <li class="dropdown-header"><h6 style="text-align:left; text-transform: capitalize;">
+              @if(session()->has('userAdminData'))
+                {{session('userAdminData.name')}}
               @else
                   
               @endif  
             </h6></li>
             <li><hr class="dropdown-divider"></li>
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="{{ url('/admin/profile') }}">
+              <a class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                <i class="bi bi-key"></i>
+                <span>Change Password</span>
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="#">
                 <i class="bi bi-person"></i>
                 <span>My Profile</span>
               </a>
@@ -335,6 +346,53 @@
 
     @yield('content')
 
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Change Password</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form method="post" action="{{ url('/admin/change-password') }}" id="changePasswordForm">
+                      @csrf
+                      <div class="row mb-3">
+                          <div class="col-md-12">
+                              <label for="old" class="form-label">Old Password</label>
+                              <input type="password" class="form-control" name="old">
+                              <span class="text-danger old"></span>
+                          </div>
+                      </div>
+                      <div class="row mb-3">
+                          <div class="col-md-12">
+                              <label for="new" class="form-label">New Password</label>
+                              <input type="password" class="form-control" name="new">
+                              <span class="text-danger new"></span>
+                          </div>
+                      </div>
+                      <div class="row mb-3">
+                          <div class="col-md-12">
+                              <label for="confirm" class="form-label">Confirm New Password</label>
+                              <input type="password" class="form-control" name="confirm">
+                              <span class="text-danger confirm"></span>
+                          </div>
+                      </div>
+
+                      <div class="row mb-3">
+                          <div class="col-sm-12">
+                              <button type="button" class="btn btn-primary changePassword">Update</button>
+                          </div>
+                      </div>
+                      <div class="col-12" style="color:red;">
+                          @if ($errors->any())
+                              <label>{{ $errors }}</label>
+                          @endif
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
   </main><!-- End #main -->
   
   <!-- ======= Footer ======= -->
@@ -442,6 +500,41 @@
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
   <script>
     var baseUrl = "{{ url('/') }}";
+
+
+    $(".changePassword").click(function (e) {
+        e.preventDefault();
+
+        let form = $("#changePasswordForm");
+        let formData = form.serialize();
+        $.ajax({
+            type: "POST",
+            url: form.attr("action"),
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                if (response.status == 200) {
+                    alert(response.message);
+                    $("#changePasswordModal").modal("hide");
+                }
+            },
+            error: function (xhr) {
+                let errors = xhr.responseJSON.errors;
+                
+                $(".text-danger").html("");
+
+                $.each(errors, function (key, value) {
+                    $("." + key).html(value[0]);
+                });
+
+                setTimeout(function () {
+                    $.each(errors, function (key, value) {
+                        $("." + key).html("");
+                    });
+                }, 5000);
+            }
+        });
+    });
   </script>
   <!-- Vendor JS Files -->
   <script src="{{asset('admin_assets/vendor/apexcharts/apexcharts.min.js')}}"></script>

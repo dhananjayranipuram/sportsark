@@ -78,7 +78,7 @@
                                     <button class="menu-close"><i class="ti-close"></i></button>
                                     <ul class="nav navbar-nav mb-2 mb-lg-0">
                                         <li><a href="{{ url('/') }}">Home</a></li>
-                                        <li><a href="{{ url('/') }}#ground">Ground</a></li>
+                                        <li><a href="{{ url('/games') }}">Ground</a></li>
                                         <li><a href="{{ url('/') }}#about">About us</a></li>
                                         <li><a href="{{ url('/') }}#testimonial">Testimonial</a></li>
                                         <li><a href="{{ url('/') }}#contact">Contact</a></li>

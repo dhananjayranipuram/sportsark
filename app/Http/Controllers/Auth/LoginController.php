@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Session;
 
 class LoginController extends Controller
 {
@@ -25,7 +26,13 @@ class LoginController extends Controller
 
         // Attempt to log the user in
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
-            // Redirect to intended page if login is successful
+            $user = Auth::user();
+
+            Session::put('userAdminData', [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email
+            ]);
             return redirect()->intended('/admin/dashboard');
         }
 
