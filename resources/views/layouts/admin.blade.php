@@ -320,7 +320,12 @@
           <span>Customers</span>
         </a>
       </li>
-      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ url('/admin/admin-ist') }}">
+          <i class="bi bi-menu-button-wide"></i>
+          <span>Admins</span>
+        </a>
+      </li>
 
     </ul>
 

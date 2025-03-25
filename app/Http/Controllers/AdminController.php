@@ -449,6 +449,37 @@ class AdminController extends Controller
         }
     }
 
+    public function adminList(){
+
+        $admin = new Admin();
+        $data['admins'] = $admin->getAdminList();
+        return view('admin/admins',$data);
+    }
+
+    public function updateAdminStatus(Request $request)
+    {
+        $admin = new Admin();
+        if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'id' => 'required',
+                'status' => 'required|in:0,1'
+            ]);
+
+            $updateStatus = $admin->UpdateAdminStatus($validated);
+            if ($updateStatus) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Admin status updated successfully!',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Error updating the admin status.',
+                ]);
+            }
+        }
+    }
+    
     public function showCustomers(){
 
         $admin = new Admin();
@@ -476,6 +507,33 @@ class AdminController extends Controller
                     'status' => 400,
                     'message' => 'Error updating the customer status.',
                 ]);
+            }
+        }
+    }
+    
+    public function addAdmins(Request $request)
+    {
+        $admin = new Admin();
+        if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email',
+                'password' => 'required|string|min:8'
+            ]);
+
+            if (!$admin->checkAdminExists($validated)) {
+                $create = $admin->createAdmin($validated);
+                if ($create) {
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Admin created successfully!',
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 400,
+                        'message' => 'Error on creating admin.',
+                    ]);
+                }
             }
         }
     }

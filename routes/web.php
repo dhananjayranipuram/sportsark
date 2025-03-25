@@ -46,6 +46,10 @@ Route::middleware('auth')->group(function () {
 
     Route::any('/admin/customers', [AdminController::class, 'showCustomers']);
     Route::any('/admin/update-user-status', [AdminController::class, 'updateCustomerStatus']);
+    
+    Route::any('/admin/admin-ist', [AdminController::class, 'adminList']);
+    Route::any('/admin/update-admin-status', [AdminController::class, 'updateAdminStatus']);
+    Route::any('/admin/add-admins', [AdminController::class, 'addAdmins']);
 
     Route::any('/admin/register', [AdminController::class, 'registration']);
 

@@ -421,4 +421,36 @@ class Admin extends Model
                     ->where('id', $data['id'])
                     ->update(['active' => $data['status']]);
     }
+    
+    public function getAdminList()
+    {
+        return DB::table('users')
+            ->select('id', 'name', 'email')
+            ->selectRaw("CASE WHEN active = 1 THEN 'Active' ELSE 'Inactive' END as status")
+            ->where('deleted', 0)
+            ->get();
+    }
+
+    public function checkAdminExists($data)
+    {
+        return DB::table('users')
+            ->where('email', $data['email'])
+            ->where('deleted', 0)
+            ->exists();
+    }
+
+    public function createAdmin($data)
+    {
+        return DB::table('users')->insert([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password'])
+        ]);
+    }
+
+    public function UpdateAdminStatus($data){
+        return DB::table('users')
+                    ->where('id', $data['id'])
+                    ->update(['active' => $data['status']]);
+    }
 }
