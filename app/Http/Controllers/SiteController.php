@@ -216,6 +216,9 @@ class SiteController extends Controller
         ]);
         $res = $site->verifyOtp($credentials);
         $valid = $site->loginUser($credentials);
+
+        // print_r($res);
+        // print_r($valid);exit;
         if($res && $valid > 0){
             Session::put('login-data', $valid);
             $response['status'] = '200';
@@ -236,10 +239,11 @@ class SiteController extends Controller
             'time' => ['required'],
             'ground_id' => ['required'],
         ]);
-        
+        // print_r($credentials);exit;
         $credentials['ground_id'] = base64_decode($credentials['ground_id']);
         $credentials['userId'] = Session::get('login-data');
         $res = $site->saveGroundBookingData($credentials);
+        // print_r($res);exit;
         if($res){
             $emailData = $site->getEmailData($res);
             $this->sendEmails($emailData[0]);

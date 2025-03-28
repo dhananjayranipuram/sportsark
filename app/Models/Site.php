@@ -113,10 +113,11 @@ class Site extends Model
     public function getBookings($data=[]){
 
         return DB::table('booking')
-            ->where('ground_id', $data['ground_id'])
-            ->where('book_date', $data['date'])
-            ->where('status', '!=', 2)
-            ->pluck('book_time')
+            ->join('booking_det', 'booking.id', '=', 'booking_det.booking_id')
+            ->where('booking.ground_id', $data['ground_id'])
+            ->where('booking.book_date', $data['date'])
+            ->where('booking.status', '!=', 2)
+            ->pluck('booking_det.book_time')
             ->toArray();
     }
 
@@ -141,14 +142,33 @@ class Site extends Model
     }
     
     public function saveGroundBookingData($data){
-        DB::table('booking')->insert([
-            'ground_id' => $data['ground_id'],
-            'user_id' => $data['userId'],
-            'book_date' => $data['date'],
-            'book_time' => $data['time']
-        ]);
+        try {
+            DB::beginTransaction();
 
-        return DB::getPdo()->lastInsertId();
+            $bookingId = DB::table('booking')->insertGetId([
+                'ground_id' => $data['ground_id'],
+                'user_id' => $data['userId'],
+                'book_date' => $data['date']
+                // 'book_time' => $data['time']
+            ]);
+
+            $bookingDetails = [];
+            foreach ($data['time'] as $timeSlot) {
+                $bookingDetails[] = [
+                    'booking_id' => $bookingId,
+                    'book_time' => $timeSlot
+                ];
+            }
+
+            DB::table('booking_det')->insert($bookingDetails);
+
+            DB::commit();
+
+            return $bookingId;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return 0;
+        }
     }
     
     public function loginUser($data){
@@ -168,12 +188,14 @@ class Site extends Model
                 g.name AS ground_name,
                 gc.name AS game_name,
                 DATE_FORMAT(b.book_date, '%d-%b-%Y') AS book_date,
-                b.book_time AS book_time
+                GROUP_CONCAT(TIME_FORMAT(bd.book_time, '%h:%i %p') ORDER BY bd.book_time SEPARATOR ', ') AS book_time
             FROM booking b
             LEFT JOIN grounds g ON g.id = b.ground_id
             LEFT JOIN ground_category gc ON g.game_id = gc.id
             LEFT JOIN enduser eu ON eu.id = b.user_id
-            WHERE b.id = :id", 
+            LEFT JOIN booking_det bd ON bd.booking_id = b.id
+            WHERE b.id = :id
+            GROUP BY b.id, eu.name, eu.email, g.name, gc.name, b.book_date",  
             ['id' => $id]);
     }
 
@@ -184,13 +206,15 @@ class Site extends Model
                 'g.name as ground_name',
                 'gc.name as game_name',
                 DB::raw("DATE_FORMAT(b.book_date, '%d-%b-%Y') as book_date"),
-                DB::raw("TIME_FORMAT(b.book_time, '%h:%i %p') as book_time"),
-                'g.rate'
+                DB::raw("GROUP_CONCAT(TIME_FORMAT(bd.book_time, '%h:%i %p') ORDER BY bd.book_time SEPARATOR ', ') as book_time"),
+                DB::raw("(COUNT(bd.id) * g.rate) as rate")
             ])
             ->leftJoin('grounds as g', 'g.id', '=', 'b.ground_id')
             ->leftJoin('ground_category as gc', 'g.game_id', '=', 'gc.id')
+            ->leftJoin('booking_det as bd', 'bd.booking_id', '=', 'b.id')
             ->where('b.id', $data['bookingId'])
             ->where('b.user_id', $data['userId'])
+            ->groupBy('b.id', 'g.name', 'gc.name', 'b.book_date', 'g.rate')
             ->first();
     }
     

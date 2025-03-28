@@ -24,8 +24,10 @@ class LoginController extends Controller
             'password' => 'required|min:6',
         ]);
 
+        $remember = $request->has('remember');
+
         // Attempt to log the user in
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
             $user = Auth::user();
 
             Session::put('userAdminData', [

@@ -82,13 +82,15 @@ class Admin extends Model
         return DB::select("SELECT 
                             b.id AS booking_id, 
                             DATE_FORMAT(b.book_date, '%d-%m-%Y') AS book_date,
-                            TIME_FORMAT(b.book_time, '%h:%i %p') as book_time,
+                            GROUP_CONCAT(TIME_FORMAT(bd.book_time, '%h:%i %p') ORDER BY bd.book_time SEPARATOR ', ') AS book_time,
                             g.name AS 'ground_name',
                             gc.name AS 'game_name'
                         FROM booking b
+                        LEFT JOIN booking_det bd ON bd.booking_id = b.id
                         LEFT JOIN grounds g ON b.ground_id = g.id
                         LEFT JOIN ground_category gc ON g.game_id = gc.id
                         WHERE b.status >= 0 $condition
+                        GROUP BY b.id, b.book_date, g.name, gc.name
                         ORDER BY b.id;");
     }
     
@@ -311,10 +313,11 @@ class Admin extends Model
                 'eu.phone as customer_mobile',
                 'g.name as ground_name',
                 DB::raw("DATE_FORMAT(b.book_date, '%d-%b-%Y') as book_date"),
-                DB::raw("TIME_FORMAT(b.book_time, '%h:%i %p') as book_time"),
+                DB::raw("GROUP_CONCAT(TIME_FORMAT(bd.book_time, '%h:%i %p') ORDER BY bd.book_time SEPARATOR ', ') as book_time"),
                 'gc.id as game_id',
                 'gc.name as game_name'
             ])
+            ->leftJoin('booking_det as bd', 'bd.booking_id', '=', 'b.id')
             ->leftJoin('grounds as g', 'g.id', '=', 'b.ground_id')
             ->leftJoin('enduser as eu', 'eu.id', '=', 'b.user_id')
             ->leftJoin('ground_category as gc', 'gc.id', '=', 'g.game_id')
@@ -325,7 +328,9 @@ class Admin extends Model
                 $query->where('gc.id', $data['gameId']);
             }
 
-            return $query->orderBy('b.book_date', 'ASC')->get();
+            return $query->groupBy('b.id', 'eu.name', 'eu.phone', 'g.name', 'b.book_date', 'gc.id', 'gc.name')
+                ->orderBy('b.book_date', 'ASC')
+                ->get();
     }
 
 

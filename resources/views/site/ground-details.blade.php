@@ -138,6 +138,103 @@
     }
 }
 </style>
+
+<style>
+        /* Booking Form Wrapper */
+.booking-form-container {
+    max-width: 85%;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+    transition: 0.3s;
+    color: #333;
+    position: relative; /* Ensure it doesn’t get affected by other elements */
+}
+
+/* Prevent styles from affecting other forms */
+.booking-form-container:hover {
+    transform: scale(1.02);
+}
+
+/* Ensure only form elements inside the booking form are styled */
+.booking-form-container .form-label {
+    font-weight: bold;
+    color: #333 !important;
+    font-size: 18px;
+}
+
+.booking-form-container .form-control {
+    border-radius: 8px;
+    border: 1px solid #ccc !important;
+    background: #fff !important;
+    color: #333 !important;
+    width: 100%;
+}
+
+/* Fix spacing */
+.booking-form-container .form-control:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+/* Time Slot Container */
+.booking-form-container .time-slot-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Time Slots */
+.booking-form-container .time-slot {
+    background: #eee !important;
+    color: #333 !important;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid #bbb !important;
+    text-align: center;
+    min-width: 55px;
+}
+
+/* Time Slot Hover Effect */
+.booking-form-container .time-slot:hover {
+    background: #ffcc00 !important;
+    color: #000 !important;
+}
+
+/* Selected Time Slot */
+.booking-form-container .time-slot.selected {
+    background: #268100 !important;
+    color: #fff !important;
+    transform: scale(1.1);
+    box-shadow: 0px 0px 10px rgba(255, 140, 0, 0.5);
+}
+
+/* Submit Button */
+.booking-form-container .btn-submit {
+    background: #268100 !important;
+    color: #fff !important;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: 0.3s;
+    width: 100%;
+    font-size: 20px;
+}
+
+.booking-form-container .btn-submit:hover {
+    background: #000000 !important;
+    transform: translateY(-3px);
+}
+
+.time-slot.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+</style>
 <!-- start of breadcumb-section -->
 <!-- <div class="wpo-breadcumb-area">
     <div class="container">
@@ -201,7 +298,7 @@
 <!-- start of places-videos-->
 <section class="places-videos-section">
     <div class="container">
-        <div class="booking-form-area">
+        <!-- <div class="booking-form-area">
             <center><h2>Check Ground Avilability</h2></center>
             <form method="post" class="booking-form" id="booking-form-main" novalidate="novalidate">
                 <div class="form-row">
@@ -225,6 +322,31 @@
                 </div>
         
                 
+            </form>
+        </div> -->
+
+        <div class="booking-form-container">
+            <h2 class="text-center mb-4">Book Your Ground</h2>
+            <form id="booking-form">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="date" class="form-label">Select Date*</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                        <br>
+                        <label class="form-label">Select Time Slots*</label>
+                        <div class="time-slot-container" id="timeSlots">
+                            @foreach($allTimeSlot as $time)
+                                @if(in_array($time, $availabelTimeSlot))
+                                    <div class="time-slot" data-time="{{ $time }}">{{ date('h:i A', strtotime($time)) }}</div>
+                                @else
+                                    <div class="time-slot disabled" data-time="{{ $time }}">{{ date('h:i A', strtotime($time)) }}</div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- <button type="submit" class="btn btn-submit">Confirm Booking</button> -->
             </form>
         </div>
         <div class="row align-items-center">
@@ -284,9 +406,14 @@ $(document).ready(function () {
         var decodedTime = atob(encodedTime);
         
         setTimeout(function () {
-            $("#time").val(decodedTime);
-            $("#time").niceSelect('update');
-        }, 250);
+            // $("#time").val(decodedTime);
+            // $("#time").niceSelect('update');
+            $(".time-slot").each(function () {
+                if (!$(this).hasClass("disabled") && $(this).attr("data-time") === decodedTime) {
+                    $(this).addClass("selected");
+                }
+            });
+        }, 400);
         
     }
 
@@ -300,8 +427,19 @@ $(document).ready(function () {
     
     $('.book-ground').on("click", function() {
         $(".preloader").show();
-        var selectedDate = $('#date').val();
-        var selectedTime = $('#time').val();
+
+        event.preventDefault();
+        let selectedDate = document.getElementById('date').value;
+        let selectedTime = [];
+        document.querySelectorAll('.time-slot.selected').forEach(slot => selectedTime.push(slot.dataset.time));
+
+        if (selectedTime.length === 0) {
+            alert("Please select at least one time slot.");
+            $(".preloader").hide();
+            return;
+        }
+        // var selectedDate = $('#date').val();
+        // var selectedTime = $('#time').val();
         var urlParams = new URLSearchParams(window.location.search);
         var groundId = urlParams.get('id');
         if (selectedDate && selectedTime && groundId) {
@@ -568,25 +706,83 @@ function generateTimeslot(){
         },
         success: function(response) {
             $(".preloader").hide();
+            // var allTimeSlot = response.allTimeSlot;
+            // var availableTimeSlot = Object.values(response.availabelTimeSlot);
+            // $("#time").niceSelect('destroy');
+            // $("#time").empty().append('<option value="">Select Time</option>');
+            // allTimeSlot.forEach(function(time) {
+            //     var isAvailable = availableTimeSlot.includes(time);
+            //     var optionText = formatTime(time);
+
+            //     var option = $("<option></option>").text(optionText).val(time);
+                
+            //     if (!isAvailable) {
+            //         option.prop("disabled", true);
+            //     }
+
+            //     $("#time").append(option);
+            // });
+            // $("#time").niceSelect();
+
             var allTimeSlot = response.allTimeSlot;
             var availableTimeSlot = Object.values(response.availabelTimeSlot);
-            $("#time").niceSelect('destroy');
-            $("#time").empty().append('<option value="">Select Time</option>');
+            
+            // Clear and update the time slot container
+            $("#timeSlots").empty();
+            
             allTimeSlot.forEach(function(time) {
                 var isAvailable = availableTimeSlot.includes(time);
-                var optionText = formatTime(time);
+                var formattedTime = formatTime(time);
 
-                var option = $("<option></option>").text(optionText).val(time);
-                
+                var timeSlot = $("<div></div>")
+                    .addClass("time-slot")
+                    .attr("data-time", time)
+                    .text(formattedTime);
+
                 if (!isAvailable) {
-                    option.prop("disabled", true);
+                    timeSlot.addClass("disabled").css({
+                        "pointer-events": "none",
+                        "opacity": "0.5",
+                        "background-color": "#ddd",
+                        "cursor": "not-allowed"
+                    });
                 }
 
-                $("#time").append(option);
+                $("#timeSlots").append(timeSlot);
             });
-            $("#time").niceSelect();
+
+            initializeTimeSlotClick();
         }
     });
 }
+
+function initializeTimeSlotClick() {
+    $(".time-slot").off("click").on("click", function () {
+        if (!$(this).hasClass("disabled")) {
+            $(this).toggleClass("selected"); // Toggle selection
+
+            let selectedTimes = $(".time-slot.selected").map(function () {
+                return $(this).data("time");
+            }).get();
+        }
+    });
+}
+</script>
+
+<script>
+    // Set minimum date to today
+    document.addEventListener("DOMContentLoaded", function () {
+        let today = new Date().toISOString().split("T")[0];
+        document.getElementById("date").setAttribute("min", today);
+    });
+
+    // Time slot selection
+    document.querySelectorAll('.time-slot').forEach(slot => {
+        slot.addEventListener('click', function () {
+            this.classList.toggle('selected');
+        });
+    });
+
+    
 </script>
 @endsection
