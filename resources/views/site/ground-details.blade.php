@@ -429,17 +429,35 @@ $(document).ready(function () {
         $(".preloader").show();
 
         event.preventDefault();
-        let selectedDate = document.getElementById('date').value;
+        let selectedDate = $('#date').val();
         let selectedTime = [];
-        document.querySelectorAll('.time-slot.selected').forEach(slot => selectedTime.push(slot.dataset.time));
+        let allSlots = $('.time-slot');
+        let selectedSlots = $('.time-slot.selected');
 
-        if (selectedTime.length === 0) {
+        if (selectedSlots.length === 0) {
             alert("Please select at least one time slot.");
             $(".preloader").hide();
             return;
         }
-        // var selectedDate = $('#date').val();
-        // var selectedTime = $('#time').val();
+
+        let firstSelectedIndex = allSlots.index(selectedSlots.first());
+        let lastSelectedIndex = allSlots.index(selectedSlots.last());
+        let isContinuous = true;
+
+        for (let i = firstSelectedIndex; i <= lastSelectedIndex; i++) {
+            if (allSlots[i].classList.contains('disabled')) {
+                isContinuous = false;
+                break;
+            }
+        }
+
+        if (!isContinuous) {
+            alert("Sandwich selection is not allowed. Please select continuous time slots without gaps.");
+            $(".preloader").hide();
+            return;
+        }
+
+        selectedSlots.forEach(slot => selectedTime.push(slot.dataset.time));
         var urlParams = new URLSearchParams(window.location.search);
         var groundId = urlParams.get('id');
         if (selectedDate && selectedTime && groundId) {
