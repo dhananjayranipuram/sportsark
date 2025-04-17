@@ -397,25 +397,21 @@ $(document).ready(function () {
 
     var urlParams = new URLSearchParams(window.location.search);
     var encodedDate = urlParams.get('date');
-    var encodedTime = urlParams.get('time');
+    let storedTime = JSON.parse(localStorage.getItem('selectedTime') || '[]');
     if (encodedDate) {
         var decodedDate = atob(encodedDate);
         $("#date").val(decodedDate);
     }
-    if (encodedTime) {
-        var decodedTime = atob(encodedTime);
-        
-        setTimeout(function () {
-            // $("#time").val(decodedTime);
-            // $("#time").niceSelect('update');
-            $(".time-slot").each(function () {
-                if (!$(this).hasClass("disabled") && $(this).attr("data-time") === decodedTime) {
-                    $(this).addClass("selected");
-                }
-            });
-        }, 400);
-        
-    }
+ 
+    setTimeout(function () {
+        $(".time-slot").each(function () {
+            const slotTime = $(this).attr("data-time");
+
+            if (!$(this).hasClass("disabled") && storedTime.includes(slotTime)) {
+                $(this).addClass("selected");
+            }
+        });
+    }, 400);
 
     generateTimeslot();
 
@@ -457,7 +453,11 @@ $(document).ready(function () {
             return;
         }
 
-        selectedSlots.forEach(slot => selectedTime.push(slot.dataset.time));
+        // selectedSlots.forEach(slot => selectedTime.push(slot.dataset.time));
+        selectedSlots.each(function () {
+            selectedTime.push($(this).data('time'));
+        });
+
         var urlParams = new URLSearchParams(window.location.search);
         var groundId = urlParams.get('id');
         if (selectedDate && selectedTime && groundId) {

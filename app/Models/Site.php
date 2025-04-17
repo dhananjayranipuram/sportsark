@@ -12,7 +12,7 @@ class Site extends Model
 
     public function getGrounds($data=[]){
 
-        $nullCondition = $timeCondition = $dateCondition = $condition = '';
+        $timeCondition = $dateCondition = $condition = '';
         if(!empty($data['game_id'])){
             $condition .= " AND g.game_id = $data[game_id]";
         }
@@ -21,12 +21,14 @@ class Site extends Model
             $dateCondition .= " AND FIND_IN_SET(WEEKDAY('$data[date]'), ga.working_days) > 0";
         }
         
-        if(!empty($data['time'])){
-            $timeCondition .= " AND ('$data[time]' >= ga.start_time AND '$data[time]' <= ga.end_time)";
-        }
-
-        if($timeCondition != '' || $dateCondition != ''){
-            $nullCondition = " AND b.id IS NULL";
+        if (!empty($data['time']) && is_array($data['time'])) {
+            $timeConditions = [];
+            foreach ($data['time'] as $time) {
+                $timeConditions[] = "('$time' >= ga.start_time AND '$time' <= ga.end_time)";
+            }
+            if (count($timeConditions)) {
+                $timeCondition .= " AND (" . implode(" OR ", $timeConditions) . ")";
+            }
         }
 
         DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));");
@@ -50,7 +52,7 @@ class Site extends Model
                         $condition
                         $dateCondition
                         $timeCondition
-                        -- $nullCondition
+
                         GROUP BY g.id;");
     }
     

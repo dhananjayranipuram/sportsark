@@ -40,7 +40,8 @@ class SiteController extends Controller
         if($request->method() == 'POST'){
             $filterData = $request->validate([
                 'date' => ['nullable', 'date'],
-                'time' => ['nullable', 'date_format:H:i:s'],
+                'time' => ['nullable', 'array'],
+                'time.*' => ['date_format:H:i:s'],
                 'game_id' => ['nullable', 'string']
             ]);
 

@@ -130,6 +130,103 @@
     margin-top: 10px;
 }
 </style>
+
+<style>
+        /* Booking Form Wrapper */
+.booking-form-container {
+    max-width: 85%;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+    transition: 0.3s;
+    color: #333;
+    position: relative; /* Ensure it doesn’t get affected by other elements */
+}
+
+/* Prevent styles from affecting other forms */
+.booking-form-container:hover {
+    transform: scale(1.02);
+}
+
+/* Ensure only form elements inside the booking form are styled */
+.booking-form-container .form-label {
+    font-weight: bold;
+    color: #333 !important;
+    font-size: 18px;
+}
+
+.booking-form-container .form-control {
+    border-radius: 8px;
+    border: 1px solid #ccc !important;
+    background: #fff !important;
+    color: #333 !important;
+    width: 100%;
+}
+
+/* Fix spacing */
+.booking-form-container .form-control:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+/* Time Slot Container */
+.booking-form-container .time-slot-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Time Slots */
+.booking-form-container .time-slot {
+    background: #eee !important;
+    color: #333 !important;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid #bbb !important;
+    text-align: center;
+    min-width: 55px;
+}
+
+/* Time Slot Hover Effect */
+.booking-form-container .time-slot:hover {
+    background: #ffcc00 !important;
+    color: #000 !important;
+}
+
+/* Selected Time Slot */
+.booking-form-container .time-slot.selected {
+    background: #268100 !important;
+    color: #fff !important;
+    transform: scale(1.1);
+    box-shadow: 0px 0px 10px rgba(255, 140, 0, 0.5);
+}
+
+/* Submit Button */
+.booking-form-container .btn-submit {
+    background: #268100 !important;
+    color: #fff !important;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: 0.3s;
+    width: 100%;
+    font-size: 20px;
+}
+
+.booking-form-container .btn-submit:hover {
+    background: #000000 !important;
+    transform: translateY(-3px);
+}
+
+.time-slot.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+</style>
 <!-- start of breadcumb-section -->
 <!-- <div class="wpo-breadcumb-area">
     <div class="container">
@@ -149,7 +246,8 @@
 <!-- end of wpo-breadcumb-section-->
 <section id="ground" class="featured-section section-padding">
     <div class="container">
-        <div class="booking-form-area">
+
+        <!-- <div class="booking-form-area">
             <center><h2>Check Ground Avilability</h2></center>
             <form method="post" class="booking-form" id="booking-form-main" novalidate="novalidate">
                 <div class="form-row">
@@ -178,6 +276,37 @@
                         </select>
                     </div>
                 </div>
+            </form>
+        </div> -->
+
+        <div class="booking-form-container">
+            <h2 class="text-center mb-4">Book Your Ground</h2>
+            <form id="booking-form">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="date" class="form-label">Select Date*</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                        <br>
+                        @php
+                            $startTime = strtotime("01:00"); // Start time
+                            $endTime = strtotime("23:00");   // End time
+                            $timeSlots = [];
+
+                            while ($startTime <= $endTime) {
+                                $timeSlots[] = date("H:i:s", $startTime);
+                                $startTime = strtotime("+1 hour", $startTime);
+                            }
+                        @endphp
+                        <label class="form-label">Select Time Slots*</label>
+                        <div class="time-slot-container" id="timeSlots">
+                            @foreach($timeSlots as $time)
+                                <div class="time-slot" data-time="{{ $time }}">{{ date('h:i A', strtotime($time)) }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- <button type="submit" class="btn btn-submit">Confirm Booking</button> -->
             </form>
         </div>
         
@@ -231,7 +360,9 @@ $(document).ready(function () {
         displayData();
     });
 
-    $('#time').on("change", function() {
+    initializeTimeSlotClick();
+
+    $('.time-slot').on("click", function() {        
         displayData(); 
     });
 });
@@ -239,12 +370,19 @@ $(document).ready(function () {
 function displayData() {
     var date = $("#date").val();
     var time = $("#time").val();
+    let selectedTime = [];
+
+    let selectedSlots = $('.time-slot.selected');
+    selectedSlots.each(function () {
+        selectedTime.push($(this).data('time'));
+    });
+    localStorage.setItem('selectedTime', JSON.stringify(selectedTime));
     $.ajax({
         url: baseUrl + '/grounds', // Ensure baseUrl is correct
         type: 'POST',
         data: { 
             'date': date,
-            'time': time,
+            'time': selectedTime,
             'game_id': getUrlParameter('game_id')
         },
         dataType: "json",
@@ -306,5 +444,19 @@ function getUrlParameter(name) {
     var urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
 }
+
+function initializeTimeSlotClick() {
+    $(".time-slot").off("click").on("click", function () {
+        if (!$(this).hasClass("disabled")) {
+            $(this).toggleClass("selected"); // Toggle selection
+
+            let selectedTimes = $(".time-slot.selected").map(function () {
+                return $(this).data("time");
+            }).get();
+        }
+    });
+}
+
+
 </script>
 @endsection
