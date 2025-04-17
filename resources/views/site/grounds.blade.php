@@ -408,7 +408,7 @@ function displayData() {
                 html += `
                     <div class="col-xl-3 col-lg-4 col-md-6 col-12 custom-grid all ${ground.classname} zoomIn" 
                          data-wow-duration="2000ms">
-                        <a href="${baseUrl}/ground-details?id=${window.btoa(ground.ground_id)}&date=${window.btoa(date)}&time=${window.btoa(time)}">
+                        <a href="${baseUrl}/ground-details?id=${window.btoa(ground.ground_id)}&date=${window.btoa(date)}">
                             <div class="featured-card">
                                 <div class="image">
                                     <img src="${baseUrl}/${firstImage}" alt="${ground.ground_name}">
