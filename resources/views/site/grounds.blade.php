@@ -362,12 +362,13 @@ $(document).ready(function () {
         // } else {
         //     dateError.textContent = "";
         // }
+        localStorage.removeItem('selectedTime');
         displayData();
     });
 
     initializeTimeSlotClick();
 
-    $('.time-slot').on("click", function() {        
+    $('.time-slot').on("click", function() {
         displayData(); 
     });
 });
@@ -395,7 +396,7 @@ function displayData() {
         success: function(res) {
 
             const availableTimeSlots = res.available_timeslots;
-
+            const persistedSelectedTime = JSON.parse(localStorage.getItem('selectedTime') || '[]');
             const start = new Date();
             start.setHours(1, 0, 0); // 01:00
 
@@ -406,10 +407,18 @@ function displayData() {
 
             while (start <= end) {
                 const time = start.toTimeString().slice(0, 8);
-                const ampm = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+                const ampm = start.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                });
 
-                if (availableTimeSlots.includes(time)) {
-                    htmlStr += `<div class="time-slot" data-time="${time}">${ampm}</div>`;
+                const isAvailable = availableTimeSlots.includes(time);
+                const isSelected = isAvailable && persistedSelectedTime.includes(time);
+                const selectedClass = isSelected ? 'selected' : '';
+
+                if (isAvailable) {
+                    htmlStr += `<div class="time-slot ${selectedClass}" data-time="${time}">${ampm}</div>`;
                 } else {
                     htmlStr += `<div class="time-slot" data-time="${time}"><s>${ampm}</s></div>`;
                 }
@@ -469,7 +478,17 @@ function displayData() {
 }
 
 $('#timeSlots').on('click', '.time-slot', function () {
+    if ($(this).find('s').length > 0) return; // Prevent clicking unavailable slots
+
     $(this).toggleClass('selected');
+
+    // Update localStorage with current selected slots
+    const selectedTimes = [];
+    $('.time-slot.selected').each(function () {
+        selectedTimes.push($(this).data('time'));
+    });
+
+    localStorage.setItem('selectedTime', JSON.stringify(selectedTimes));
 });
 
 function getUrlParameter(name) {

@@ -141,7 +141,7 @@
                         </div>
                         
                         
-                        <div class="col col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
                             <div class="widget link-widget">
                                 <div class="widget-title">
                                     <h3>Grounds:</h3>
@@ -171,6 +171,27 @@
                                 </form>
                             </div>
                         </div> -->
+
+                        <div class="col col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+                            <div class="widget contact-widget">
+                                <div class="widget-title">
+                                    <h3>Contact Us</h3>
+                                </div>
+                                <ul class="contact-info list-unstyled">
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        SPORTSARK<br>
+                                        Gate #3, Near GEMS School<br>
+                                        Silicon Oasis<br>
+                                        Dubai, UAE
+                                    </li><br>
+                                    <li>
+                                        <i class="fas fa-phone-alt"></i>
+                                        <a href="tel:0581567345" style=" color: #ffffff; ">0581567345</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div> <!-- end container -->
             </div>
