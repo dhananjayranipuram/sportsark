@@ -219,5 +219,13 @@ class Site extends Model
             ->groupBy('b.id', 'g.name', 'gc.name', 'b.book_date', 'g.rate')
             ->first();
     }
+
+    public function getAvailableGrounds($data){
+        return DB::table('ground_availability as ga')
+            ->leftJoin('grounds as g', 'g.id', '=', 'ga.ground_id')
+            ->where('g.game_id', $data['game_id'])
+            ->whereRaw("FIND_IN_SET(?, ga.working_days)", [$data['week_day']])
+            ->get();
+    }
     
 }

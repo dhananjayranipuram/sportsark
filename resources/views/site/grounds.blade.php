@@ -300,7 +300,12 @@
                         <label class="form-label">Select Time Slots*</label>
                         <div class="time-slot-container" id="timeSlots">
                             @foreach($timeSlots as $time)
-                                <div class="time-slot" data-time="{{ $time }}">{{ date('h:i A', strtotime($time)) }}</div>
+                                @if(in_array($time, $available_timeslots))
+                                    <div class="time-slot" data-time="{{ $time }}">{{ date('h:i A', strtotime($time)) }}</div>
+                                @else
+                                    <div class="time-slot" data-time="{{ $time }}"><s>{{ date('h:i A', strtotime($time)) }}</s></div>
+                                @endif
+                                
                             @endforeach
                         </div>
                     </div>
@@ -389,6 +394,30 @@ function displayData() {
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
 
+            const availableTimeSlots = res.available_timeslots;
+
+            const start = new Date();
+            start.setHours(1, 0, 0); // 01:00
+
+            const end = new Date();
+            end.setHours(23, 0, 0); // 23:00
+
+            let htmlStr = '';
+
+            while (start <= end) {
+                const time = start.toTimeString().slice(0, 8);
+                const ampm = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+
+                if (availableTimeSlots.includes(time)) {
+                    htmlStr += `<div class="time-slot" data-time="${time}">${ampm}</div>`;
+                } else {
+                    htmlStr += `<div class="time-slot" data-time="${time}"><s>${ampm}</s></div>`;
+                }
+
+                start.setHours(start.getHours() + 1);
+            }
+            $('#timeSlots').html(htmlStr);
+
             if (!res.grounds || res.grounds.length === 0) {
                 // console.warn("No grounds available.");
                 var str = '<div class="no-grounds">'
@@ -439,6 +468,9 @@ function displayData() {
     });
 }
 
+$('#timeSlots').on('click', '.time-slot', function () {
+    $(this).toggleClass('selected');
+});
 
 function getUrlParameter(name) {
     var urlParams = new URLSearchParams(window.location.search);

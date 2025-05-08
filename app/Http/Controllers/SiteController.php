@@ -8,6 +8,7 @@ use App\Mail\OtpVerification;
 use App\Mail\BookingConfirmed;
 use Mail;
 use Session;
+use Illuminate\Support\Carbon;
 
 class SiteController extends Controller
 {
@@ -51,6 +52,8 @@ class SiteController extends Controller
 
             $data['games'] = $site->getGames();
             $data['grounds'] = $site->getGrounds($filterData);
+
+            $data['available_timeslots'] = $this->getAvailableTimeSlotsByDate($filterData);
             return response()->json($data);
         }else{
             $filterData = $queries = [];
@@ -59,9 +62,35 @@ class SiteController extends Controller
             $filterData['game_id'] = base64_decode($queries['game_id']);
             $data['games'] = $site->getGames();
             $data['grounds'] = $site->getGrounds($filterData);
-            // echo '<pre>';print_r($data);exit;
+            $filterData['date'] = Carbon::today();
+            $data['available_timeslots'] = $this->getAvailableTimeSlotsByDate($filterData);
+            
             return view('site/grounds',$data);
         }        
+    }
+
+    public function getAvailableTimeSlotsByDate($data)
+    {
+        $site = new Site();
+        $input = [];
+        $dayIndex = Carbon::parse($data['date'])->dayOfWeek; // 0 (Sun) to 6 (Sat)
+        $customDayMap = [0 => 6, 1 => 0, 2 => 1, 3 => 2, 4 => 3, 5 => 4, 6 => 5];
+        $data['week_day'] = $customDayMap[$dayIndex];
+        
+        $availabilities = $site->getAvailableGrounds($data);
+        
+        $timeSlots = [];
+
+        foreach ($availabilities as $availability) {
+
+            $slots = $this->generateTimeSlots($availability->start_time, $availability->end_time, $availability->duration);
+            $timeSlots = array_merge($timeSlots, $slots);
+        }
+ 
+        $timeSlots = array_unique($timeSlots);
+        sort($timeSlots);
+    
+        return $timeSlots;
     }
 
     public function groundTimeSlot(Request $request){
