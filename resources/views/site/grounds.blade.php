@@ -191,7 +191,7 @@
 }
 
 /* Time Slot Hover Effect */
-.booking-form-container .time-slot:hover {
+.booking-form-container .time-slot:hover:not(:has(s)) {
     background: #ffcc00 !important;
     color: #000 !important;
 }
@@ -303,7 +303,7 @@
                                 @if(in_array($time, $available_timeslots))
                                     <div class="time-slot" data-time="{{ $time }}">{{ date('h:i A', strtotime($time)) }}</div>
                                 @else
-                                    <div class="time-slot" data-time="{{ $time }}"><s>{{ date('h:i A', strtotime($time)) }}</s></div>
+                                    <div class="time-slot striked" data-time="{{ $time }}"><s>{{ date('h:i A', strtotime($time)) }}</s></div>
                                 @endif
                                 
                             @endforeach
@@ -420,7 +420,7 @@ function displayData() {
                 if (isAvailable) {
                     htmlStr += `<div class="time-slot ${selectedClass}" data-time="${time}">${ampm}</div>`;
                 } else {
-                    htmlStr += `<div class="time-slot" data-time="${time}"><s>${ampm}</s></div>`;
+                    htmlStr += `<div class="time-slot striked" data-time="${time}"><s>${ampm}</s></div>`;
                 }
 
                 start.setHours(start.getHours() + 1);
