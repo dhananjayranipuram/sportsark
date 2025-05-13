@@ -314,7 +314,7 @@
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           @foreach($menuGames as $key => $value)
           <li>
-            <a href="{{ url('/admin/ground-list') }}?id={{ base64_encode($value->game_id) }}">
+            <a href="{{ route('admin.grounds', ['id' => base64_encode($value->game_id)]) }}">
               <i class="bi bi-circle"></i><span>{{$value->game_name}}</span>
             </a>
           </li>

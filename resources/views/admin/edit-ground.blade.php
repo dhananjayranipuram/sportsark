@@ -37,7 +37,7 @@
                     </div>
                     <div class="col-md-4">
                         <label for="rate" class="form-label">Rate</label>
-                        <input type="text" class="form-control" name="rate" value="{{$grounds->rate}}">
+                        <input type="text" class="form-control" name="rate" value="{{ old('rate', $grounds->rate ?? '') }}">
                         @error('rate') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>

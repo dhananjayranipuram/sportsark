@@ -119,13 +119,12 @@ class AdminController extends Controller
         return round((($current - $previous) / $previous) * 100, 2);
     }
 
-    public function grounds(){
+    public function grounds($id = null){
 
         $admin = new Admin();
-        $queries = [];
-        parse_str($_SERVER['QUERY_STRING'], $queries);
-        if (isset($queries['id'])) {
-            $gameId = base64_decode($queries['id']);
+
+        if ($id) {
+            $gameId = base64_decode($id);
             session(['game_id' => $gameId]);
         } else {
             $gameId = session('game_id');
