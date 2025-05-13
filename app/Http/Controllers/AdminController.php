@@ -212,7 +212,7 @@ class AdminController extends Controller
 
             return Redirect::to('/admin/ground-list')->with('success', 'Ground added successfully!');
         } else {
-            $input['id'] = $id;
+            $input['id'] = base64_decode($id);
             $data['game'] = $admin->getGroundGame();
             $data['grounds'] = $admin->getGrounds($input)[0] ?? null;
             if (!$data['grounds']) {

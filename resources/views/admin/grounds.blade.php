@@ -45,7 +45,7 @@
                                         <td>{{$value->rate}}</td>
                                         <td>{{$value->category_name}}</td>
                                         <td><div >
-                                            <a href="{{ url('/admin/edit-ground') }}/{{$value->ground_id}}" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                                            <a href="{{ route('admin.edit-ground', ['id' => base64_encode($value->ground_id)]) }}" class="btn btn-default"><i class="fa fa-edit"></i></a>
                                             <a href="#" class="btn btn-default deleteDoc" data-id="{{$value->ground_id}}"><i class="fa fa-trash"></i></a>
                                         </div></td>
                                     </tr>

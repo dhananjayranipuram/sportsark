@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::any('/admin/ground-list/{id?}', [AdminController::class, 'grounds'])->name('admin.grounds');
     Route::any('/admin/add-ground', [AdminController::class, 'addGrounds']);
     Route::any('/admin/delete-ground', [AdminController::class, 'deleteGround']);
-    Route::any('/admin/edit-ground/{id}', [AdminController::class, 'editGround']);
+    Route::any('/admin/edit-ground/{id?}', [AdminController::class, 'editGround'])->name('admin.edit-ground');
 
     Route::any('/admin/games-list', [AdminController::class, 'games']);
     Route::any('/admin/add-games', [AdminController::class, 'addGames']);
