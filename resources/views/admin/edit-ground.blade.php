@@ -2,6 +2,12 @@
 
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+.img-thumbnail{
+    height: 165px;
+    width: 165px;
+}
+</style>
 <section class="add-doctor">
     
     <div class="card">
