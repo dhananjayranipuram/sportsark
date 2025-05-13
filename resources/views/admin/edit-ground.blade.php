@@ -122,28 +122,28 @@ $(document).ready(function() {
         var groundId = $(this).data("id");
         var button = $(this);
 
-        if (confirm("Are you sure you want to delete this image?")) {
-            $.ajax({
-                url: "{{ url('/admin/delete-ground-image') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    image: image,
-                    ground_id: groundId
-                },
-                success: function (response) {
-                    if (response.status === 200) {
-                        button.closest(".col-md-2").remove();
-                        alert("Image deleted successfully.");
-                    } else {
-                        alert("Failed to delete the image.");
-                    }
-                },
-                error: function () {
-                    alert("An error occurred. Please try again.");
+        
+        $.ajax({
+            url: "{{ url('/admin/delete-ground-image') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                image: image,
+                ground_id: groundId
+            },
+            success: function (response) {
+                if (response.status === 200) {
+                    button.closest(".col-md-2").remove();
+                    // alert("Image deleted successfully.");
+                } else {
+                    alert("Failed to delete the image.");
                 }
-            });
-        }
+            },
+            error: function () {
+                alert("An error occurred. Please try again.");
+            }
+        });
+        
     });
 });
 </script>

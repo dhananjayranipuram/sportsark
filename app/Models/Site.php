@@ -123,6 +123,16 @@ class Site extends Model
             ->toArray();
     }
 
+    public function getBookingsByDate($data=[]){
+
+        return DB::table('booking')
+            ->join('booking_det', 'booking.id', '=', 'booking_det.booking_id')
+            ->where('booking.book_date', $data['date'])
+            ->where('booking.status', '!=', 2)
+            ->pluck('booking_det.book_time')
+            ->toArray();
+    }
+
     public function saveOtp($data){
         return DB::INSERT("INSERT INTO otp (otp) VALUES ('$data[otp]');");
     }

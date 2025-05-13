@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $admin = new Admin();
+        $games = $admin->getGames();
+        view()->share('menuGames', $games);
+    }
+
     public function login(){
         
         return view('admin/login');
@@ -115,7 +122,20 @@ class AdminController extends Controller
     public function grounds(){
 
         $admin = new Admin();
-        $data['grounds'] = $admin->getGrounds();
+        $queries = [];
+        parse_str($_SERVER['QUERY_STRING'], $queries);
+        if (isset($queries['id'])) {
+            $gameId = base64_decode($queries['id']);
+            session(['game_id' => $gameId]);
+        } else {
+            $gameId = session('game_id');
+        }
+        if ($gameId) {
+            $input['game_id'] = $gameId;
+            $data['grounds'] = $admin->getGrounds($input);
+        } else {
+            $data['grounds'] = [];
+        }
         return view('admin/grounds',$data);
     }
     

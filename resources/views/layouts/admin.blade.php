@@ -305,10 +305,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ url('/admin/ground-list') }}">
+        <!-- <a class="nav-link collapsed" href="{{ url('/admin/ground-list') }}"> -->
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-menu-button-wide"></i>
           <span>Grounds</span>
+          <i class="bi bi-chevron-down ms-auto"></i>
         </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          @foreach($menuGames as $key => $value)
+          <li>
+            <a href="{{ url('/admin/ground-list') }}?id={{ base64_encode($value->game_id) }}">
+              <i class="bi bi-circle"></i><span>{{$value->game_name}}</span>
+            </a>
+          </li>
+          @endforeach
+        </ul>
       </li>
 
       <li class="nav-item">

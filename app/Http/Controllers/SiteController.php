@@ -53,7 +53,9 @@ class SiteController extends Controller
             $data['games'] = $site->getGames();
             $data['grounds'] = $site->getGrounds($filterData);
 
-            $data['available_timeslots'] = $this->getAvailableTimeSlotsByDate($filterData);
+            $availableTimeSlots = $this->getAvailableTimeSlotsByDate($filterData);
+            $bookingFortheDay = $site->getBookingsByDate($filterData);
+            $data['available_timeslots'] = array_diff($availableTimeSlots, $bookingFortheDay);
             return response()->json($data);
         }else{
             $filterData = $queries = [];
@@ -63,7 +65,9 @@ class SiteController extends Controller
             $data['games'] = $site->getGames();
             $data['grounds'] = $site->getGrounds($filterData);
             $filterData['date'] = Carbon::today();
-            $data['available_timeslots'] = $this->getAvailableTimeSlotsByDate($filterData);
+            $availableTimeSlots = $this->getAvailableTimeSlotsByDate($filterData);
+            $bookingFortheDay = $site->getBookingsByDate($filterData);
+            $data['available_timeslots'] = array_diff($availableTimeSlots, $bookingFortheDay);
             
             return view('site/grounds',$data);
         }        
@@ -162,7 +166,7 @@ class SiteController extends Controller
         $endTimestamp = strtotime($endTime);
         $durationInSeconds = strtotime($duration) - strtotime('00:00:00');
     
-        for ($currentTime = $startTimestamp; $currentTime < $endTimestamp; $currentTime += $durationInSeconds) {
+        for ($currentTime = $startTimestamp; $currentTime <= $endTimestamp; $currentTime += $durationInSeconds) {
             $timeSlots[] = date('H:i:s', $currentTime);
         }
     

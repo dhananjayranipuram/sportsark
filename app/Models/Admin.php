@@ -19,6 +19,9 @@ class Admin extends Model
         if(!empty($data['id'])){
             $condition .= " AND g.id = $data[id]";
         }
+        if(!empty($data['game_id'])){
+            $condition .= " AND g.game_id = $data[game_id]";
+        }
         DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));");
         return DB::select("SELECT 
                             g.id AS ground_id, 
